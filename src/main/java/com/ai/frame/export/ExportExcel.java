@@ -1,17 +1,13 @@
 /**
  * Created by Administrator on 2018/8/11.
  */
-package com.ai.frame.util;
+package com.ai.frame.export;
 
-import java.io.BufferedInputStream;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -21,6 +17,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.swing.JOptionPane;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
@@ -36,7 +33,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.util.HSSFColor;
 
 /**
- * 利用开源组件POI3.0.2动态导出EXCEL文档 转载时请保留以下信息，注明出处！
+ * 利用开源组件POI3.0.2动态导出EXCEL文档
  *
  * @author leno
  * @version v1.0
@@ -86,7 +83,8 @@ public class ExportExcel<T>
         HSSFSheet sheet = workbook.createSheet(title);
         // 设置表格默认列宽度为15个字节
         sheet.setDefaultColumnWidth((short) 15);
-        // 生成一个样式
+
+        // 生成一个样式1
         HSSFCellStyle style = workbook.createCellStyle();
         // 设置这些样式
         style.setFillForegroundColor(HSSFColor.SKY_BLUE.index);
@@ -96,14 +94,15 @@ public class ExportExcel<T>
         style.setBorderRight(HSSFCellStyle.BORDER_THIN);
         style.setBorderTop(HSSFCellStyle.BORDER_THIN);
         style.setAlignment(HSSFCellStyle.ALIGN_CENTER);
-        // 生成一个字体
+        // 生成一个字体1
         HSSFFont font = workbook.createFont();
         font.setColor(HSSFColor.VIOLET.index);
         font.setFontHeightInPoints((short) 12);
         font.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
         // 把字体应用到当前的样式
         style.setFont(font);
-        // 生成并设置另一个样式
+
+        // 生成并设置另一个样式2
         HSSFCellStyle style2 = workbook.createCellStyle();
         style2.setFillForegroundColor(HSSFColor.LIGHT_YELLOW.index);
         style2.setFillPattern(HSSFCellStyle.SOLID_FOREGROUND);
@@ -113,7 +112,7 @@ public class ExportExcel<T>
         style2.setBorderTop(HSSFCellStyle.BORDER_THIN);
         style2.setAlignment(HSSFCellStyle.ALIGN_CENTER);
         style2.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
-        // 生成另一个字体
+        // 生成另一个字体2
         HSSFFont font2 = workbook.createFont();
         font2.setBoldweight(HSSFFont.BOLDWEIGHT_NORMAL);
         // 把字体应用到当前的样式
@@ -161,47 +160,38 @@ public class ExportExcel<T>
                 try
                 {
                     Class tCls = t.getClass();
-                    Method getMethod = tCls.getMethod(getMethodName,
-                            new Class[]
-                                    {});
-                    Object value = getMethod.invoke(t, new Object[]
-                            {});
+                    Method getMethod = tCls.getMethod(getMethodName, new Class[]{});
+                    Object value = getMethod.invoke(t, new Object[]{});
                     // 判断值的类型后进行强制类型转换
                     String textValue = null;
-                    // if (value instanceof Integer) {
-                    // int intValue = (Integer) value;
-                    // cell.setCellValue(intValue);
-                    // } else if (value instanceof Float) {
-                    // float fValue = (Float) value;
-                    // textValue = new HSSFRichTextString(
-                    // String.valueOf(fValue));
-                    // cell.setCellValue(textValue);
-                    // } else if (value instanceof Double) {
-                    // double dValue = (Double) value;
-                    // textValue = new HSSFRichTextString(
-                    // String.valueOf(dValue));
-                    // cell.setCellValue(textValue);
-                    // } else if (value instanceof Long) {
-                    // long longValue = (Long) value;
-                    // cell.setCellValue(longValue);
-                    // }
+                    if (value instanceof Integer) {
+                        int intValue = (Integer) value;
+                         cell.setCellValue(intValue);
+                    } else if (value instanceof Float) {
+                         float fValue = (Float) value;
+                        HSSFRichTextString textValue1 = new HSSFRichTextString(String.valueOf(fValue));
+                          cell.setCellValue(textValue1);
+                    } else if (value instanceof Double) {
+                         double dValue = (Double) value;
+                        HSSFRichTextString textValue2 = new HSSFRichTextString(String.valueOf(dValue));
+                         cell.setCellValue(textValue2);
+                    } else if (value instanceof Long) {
+                         long longValue = (Long) value;
+                         cell.setCellValue(longValue);
+                    }
                     if (value instanceof Boolean)
                     {
                         boolean bValue = (Boolean) value;
                         textValue = "男";
-                        if (!bValue)
-                        {
+                        if (!bValue) {
                             textValue = "女";
                         }
-                    }
-                    else if (value instanceof Date)
-                    {
+                    } else if (value instanceof Date) {
                         Date date = (Date) value;
                         SimpleDateFormat sdf = new SimpleDateFormat(pattern);
                         textValue = sdf.format(date);
                     }
-                    else if (value instanceof byte[])
-                    {
+                    else if (value instanceof byte[]) {
                         // 有图片时，设置行高为60px;
                         row.setHeightInPoints(60);
                         // 设置图片所在列宽度为80px,注意这里单位的一个换算
@@ -213,12 +203,11 @@ public class ExportExcel<T>
                         anchor.setAnchorType(2);
                         patriarch.createPicture(anchor, workbook.addPicture(
                                 bsValue, HSSFWorkbook.PICTURE_TYPE_JPEG));
-                    }
-                    else
-                    {
+                    } else {
                         // 其它数据类型都当作字符串简单处理
                         textValue = value.toString();
                     }
+
                     // 如果不是图片数据，就利用正则表达式判断textValue是否全部由数字组成
                     if (textValue != null)
                     {
@@ -240,44 +229,39 @@ public class ExportExcel<T>
                         }
                     }
                 }
-                catch (SecurityException e)
-                {
+                catch (SecurityException e) {
                     e.printStackTrace();
-                }
-                catch (NoSuchMethodException e)
-                {
+                } catch (NoSuchMethodException e) {
                     e.printStackTrace();
-                }
-                catch (IllegalArgumentException e)
-                {
+                } catch (IllegalArgumentException e) {
                     e.printStackTrace();
-                }
-                catch (IllegalAccessException e)
-                {
+                } catch (IllegalAccessException e) {
                     e.printStackTrace();
-                }
-                catch (InvocationTargetException e)
-                {
+                } catch (InvocationTargetException e) {
                     e.printStackTrace();
-                }
-                finally
-                {
+                } finally {
                     // 清理资源
                 }
             }
         }
-        try
-        {
+        try {
             workbook.write(out);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void main(String[] args)
+    public static void main(String[] args) throws Exception
     {
+        //测试ship
+        DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+        ExportExcel<Ship> ex3 = new ExportExcel<Ship>();
+        String[] headers3 =
+                { "id", "创建日期", "船舶名称", "船舶长度", "吨位","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况" };
+        List<Ship> dataset3 = new ArrayList<Ship>();
+        dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
+        dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
+        dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
         // 测试学生
         ExportExcel<Student> ex = new ExportExcel<Student>();
         String[] headers =
@@ -291,10 +275,9 @@ public class ExportExcel<T>
         String[] headers2 =
                 { "图书编号", "图书名称", "图书作者", "图书价格", "图书ISBN", "图书出版社", "封面图片" };
         List<Book> dataset2 = new ArrayList<Book>();
-        try
-        {
+        try {
             BufferedInputStream bis = new BufferedInputStream(
-                    new FileInputStream("V://book.bmp"));
+                    new FileInputStream("D:\\IO\\test\\timg.bmp"));
             byte[] buf = new byte[bis.available()];
             while ((bis.read(buf)) != -1)
             {
@@ -311,12 +294,15 @@ public class ExportExcel<T>
             dataset2.add(new Book(5, "c#入门", "leno", 300.33f, "1234567",
                     "汤春秀出版社", buf));
 
-            OutputStream out = new FileOutputStream("E://a.xls");
-            OutputStream out2 = new FileOutputStream("E://b.xls");
+            OutputStream out = new FileOutputStream("D:\\IO\\output\\a.xls");
+            OutputStream out2 = new FileOutputStream("D:\\IO\\output\\b.xls");
+            OutputStream out3 = new FileOutputStream("D:\\IO\\output\\c.xls");
             ex.exportExcel(headers, dataset, out);
             ex2.exportExcel(headers2, dataset2, out2);
+            ex3.exportExcel(headers3, dataset3, out3);
             out.close();
             out2.close();
+            out3.close();
             JOptionPane.showMessageDialog(null, "导出成功!");
             System.out.println("excel导出成功！");
         } catch (FileNotFoundException e) {

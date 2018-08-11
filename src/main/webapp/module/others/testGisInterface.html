@@ -12,6 +12,8 @@ function test(){
 		dataType: "json",
 		url:"/shipManage/module/shipManage/queryShip.do",
 		data:{
+			pno:     1,
+			pageSize: 5
 			},
 		success: function(result) 
 		{
@@ -34,10 +36,9 @@ function test2(){
 	$.ajax({
 		type: "get",
 		dataType: "json",
-		url:"/gisOptimize/module/actWarning/updateGridSHP.do",
+		url:"/shipManage/module/shipManage/queryShipByName.do",
 		data:{
-			actId: 10055,
-			coordStr:"120.22745628321024,30.26151517006272,120.23122916658771,30.259955473886286,120.22972001323672,30.257491102928924,120.22580340096869,30.259300394030706,120.22745628321024,30.2615151700627"
+			name: '曙光惠明'
 		},
 		success: function(result)
 		{
@@ -55,11 +56,37 @@ function test2(){
 		}
 	});
 }
+
+function test3(){
+	$.ajax({
+		type: "get",
+		//dataType: "json",
+		url:"/shipManage/module/shipManage/dataExport.do",
+		data:{
+			pno:     1,
+			pageSize: 5
+		},
+		success: function(result)
+		{
+			console.log(result);
+			var status=result.status;
+			var res = $("#div");
+			if(status==0){
+				alert(result.msg);
+				res.append(JSON.stringify(result.newAddr));
+				res.append("<br>");
+			}
+		},
+		error: function(result) {
+			//alert("发送请求失败:状态码" + result.status);
+		}
+	});
+}
 </script>
 </head>
 <body>
 
-	<input type="button" onclick="test();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
+	<input type="button" onclick="test3();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
 
 <div id="div"></div>
 </body>
