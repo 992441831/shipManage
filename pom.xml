@@ -25,6 +25,23 @@
 	</properties>
 
 	<dependencies>
+
+        <dependency>
+            <groupId>org.apache.poi.DELETE</groupId>
+            <artifactId>poi</artifactId>
+            <version>3.0-FINAL</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lucee</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.15.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.xmlbeans</groupId>
+            <artifactId>xmlbeans</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-thymeleaf</artifactId>

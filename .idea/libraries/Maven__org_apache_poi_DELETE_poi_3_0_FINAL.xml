@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.apache.poi.DELETE:poi:3.0-FINAL">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../../maven-local/repository/org/apache/poi/DELETE/poi/3.0-FINAL/poi-3.0-FINAL.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/../../maven-local/repository/org/apache/poi/DELETE/poi/3.0-FINAL/poi-3.0-FINAL-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../maven-local/repository/org/apache/poi/DELETE/poi/3.0-FINAL/poi-3.0-FINAL-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
