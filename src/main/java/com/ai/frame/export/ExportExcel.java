@@ -7,11 +7,12 @@ import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.sql.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
+
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -259,17 +260,17 @@ public class ExportExcel<T>
         String[] headers3 =
                 { "id", "创建日期", "船舶名称", "船舶长度", "吨位","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况" };
         List<Ship> dataset3 = new ArrayList<Ship>();
-        dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
-        dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
-        dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
+       // dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
+       // dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
+        //dataset3.add(new Ship(1001,dateFormat1.parse("2018-8-11"),"雪龙号",12.3,340.6,dateFormat1.parse("2018-8-11"),"g港",dateFormat1.parse("2018-8-11"),56,"123","222"));
         // 测试学生
         ExportExcel<Student> ex = new ExportExcel<Student>();
         String[] headers =
                 { "学号", "姓名", "年龄", "性别", "出生日期" };
         List<Student> dataset = new ArrayList<Student>();
-        dataset.add(new Student(10000001, "张三", 20, true, new Date()));
-        dataset.add(new Student(20000002, "李四", 24, false, new Date()));
-        dataset.add(new Student(30000003, "王五", 22, true, new Date()));
+        dataset.add(new Student(10000001, "张三", 20, true, new java.util.Date()));
+        dataset.add(new Student(20000002, "李四", 24, false,new java.util.Date()));
+        dataset.add(new Student(30000003, "王五", 22, true,new java.util.Date()));
         // 测试图书
         ExportExcel<Book> ex2 = new ExportExcel<Book>();
         String[] headers2 =
