@@ -5,6 +5,9 @@
 		<testFolder url="file://$MODULE_DIR$/src/test/java"/>
 		<excludeFolder url="file://$MODULE_DIR$/target"/>
 	</contentEntry>
+	<lib name="ojdbc6-11.2.0.3.jar" scope="COMPILE">
+		<relative-module-cls project-related="jar://$PROJECT_DIR$/lib/ojdbc6-11.2.0.3.jar!/"/>
+	</lib>
 	<lib name="Maven: org.yaml:snakeyaml:1.17" scope="RUNTIME"/>
 	<lib name="Maven: org.springframework.boot:spring-boot-starter-test:1.5.8.RELEASE" scope="TEST"/>
 	<lib name="Maven: org.springframework.boot:spring-boot-test:1.5.8.RELEASE" scope="TEST"/>

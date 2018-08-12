@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Title</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <script src="js/jquery-1.11.3.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/vue.js"></script>
+</head>
+<body>
+<div id="app">
+<div class="page-header">
+    <h3 class="text-center" style="color:#337ab7;">XXX港区船舶监管系统</h3>
+</div>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="form-group col-xs-6">
+                <select class="form-control">
+                    <option value="">--请选择--</option>
+                    <option value="week">7天内</option>
+                    <option value="month">30天内</option>
+                </select>
+                </div>
+                <a class="btn btn-default" id="show">全部显示</a>
+            </div>
+            <div class="col-xs-4">
+                <a class="btn btn-primary">刷新</a>
+            </div>
+            <div class="col-xs-3">
+                <div class="form-group has-feedback">
+                    <label for="ship-kw" class="sr-only">搜索船名：</label>
+                    <input class="form-control" type="text" id="ship-kw" placeholder="请输入船名">
+                    <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                </div>
+            </div>
+            <div class="col-xs-1">
+                <a class="btn btn-primary pull-right" href="#" id="export">导出</a>
+            </div>
+        </div>
+<!--表格-->
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive">
+                    <table class="table table-responsive table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>日期</th>
+                            <th>船名</th>
+                            <th>船长</th>
+                            <th>吨位</th>
+                            <th>抛锚日期</th>
+                            <th>目的港</th>
+                            <th>起锚日期</th>
+                            <th>锚泊天数</th>
+                            <th>电话</th>
+                            <th>其它</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody1">
+                        <!--动态添加数据 start-->
+                        
+                        <!--动态添加数据 end-->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <ul class="pagination pull-right" id="pagination">
+                            
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+</div>
+<script src="js/ship_list.js"></script>
+<script src="js/ship_search.js"></script>
+<script>
+var pno;
+var pageSize=5;
+//默认调用第一页
+loadShipByPage(1,pageSize);
+
+//点击按钮刷新页面
+$("#ship_list_update").click(function(){
+	loadShipByPage(1,pageSize);
+});
+
+//为分页条中每个页码添加点击事件
+$("#pagination").on("click","li a",function(e){
+    //7.1 阻止事件默认行为
+    e.preventDefault();//a submit 都要阻止默认行为
+    //7.2 获取当元素页码
+    pno = parseInt($(this).html());
+    //8:不同页码调用 loadProductByPage()
+    loadShipByPage(pno,pageSize);
+});
+
+//1:获取上限输入input绑定事件 keyup   11:40--11:45
+$("#ship-kw").keyup(function(e){
+  //2:获取上限 下限 关键字
+  var name = $("#ship-kw").val();
+  //3:如果当前用户输入 enter
+  if(e.keyCode==13) {
+      //4:调用
+  	console.log(name);
+      searchShipByName(name);
+  }
+});
+
+//全部显示
+$("#show").click(function(){
+	loadShipByPage(pno,pageSize);
+});
+
+
+$("#export").on("click",function(){
+	console.log("当前页面");
+	  console.log(pno);
+	  console.log(pageSize);
+	  $(this).attr("href","/shipManage/module/shipManage/dataExport.do?pno="+pno+"&pageSize="+pageSize+"");
+})
+  
+</script>
+</body>
+</html>
