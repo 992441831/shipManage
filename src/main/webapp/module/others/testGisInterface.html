@@ -82,11 +82,34 @@ function test3(){
 		}
 	});
 }
+function test4(){
+	$.ajax({
+		type: "get",
+		//dataType: "json",
+		url:"/shipManage/module/shipManage/refreshData.do",
+		data:{
+		},
+		success: function(result)
+		{
+			console.log(result);
+			var status=result.status;
+			var res = $("#div");
+			if(status==0){
+				alert(result.msg);
+				res.append(JSON.stringify(result.newAddr));
+				res.append("<br>");
+			}
+		},
+		error: function(result) {
+			//alert("发送请求失败:状态码" + result.status);
+		}
+	});
+}
 </script>
 </head>
 <body>
 
-	<input type="button" onclick="test3();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
+	<input type="button" onclick="test4();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
 
 <div id="div"></div>
 </body>

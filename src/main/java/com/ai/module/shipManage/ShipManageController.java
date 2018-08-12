@@ -151,5 +151,27 @@ public class ShipManageController {
         }
     }
 
+    /**
+     * 数据库后台刷新数据
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/refreshData.do",method = RequestMethod.GET)
+    @ResponseBody
+    public  Object refreshData(HttpServletRequest request,
+                             HttpServletResponse response) throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
+        // 取查询条件
+        Map paramMap =  GetParamUtil.getRequestParamMap(request);
+        Map reusltMap = new HashMap();
+        try{
+            reusltMap = shipManageService.refreshData(paramMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return reusltMap;
+    }
 
 }

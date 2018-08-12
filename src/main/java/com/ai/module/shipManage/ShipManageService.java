@@ -65,6 +65,23 @@ public class ShipManageService {
         }
         return result;
     }
-
+    /**
+     * 数据库后台刷新数据
+     * @author yc
+     * @since 2018/8/4
+     * */
+    public Map refreshData(Map paramMap) {
+        Map result = new HashMap();
+        try{
+            shipManageMapper.refreshData();
+            result.put("status", 0);
+            result.put("msg", "刷新成功");
+        }catch(Exception e) {
+            e.printStackTrace();
+            result.put("status", 1);
+            result.put("msg", "程序异常:查询失败error:"+e.getMessage());
+        }
+        return result;
+    }
 
 }

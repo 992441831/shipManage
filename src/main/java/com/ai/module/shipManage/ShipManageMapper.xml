@@ -20,5 +20,40 @@
         select * from shipmanage sm where sm.name=#{name}
     </select>
 
+    <!--用于数据库刷新数据,从三张表中获取数据，并加上业务逻辑后插入到 终表中-->
+    <insert id="refreshData">
+        insert into shipmanage
+						(create_date,name,length,tonnage,anchor_date,target_port,weigh_date,anchor_days,telephone,break_rules)
+			select 	now(),		t.name,
+							-- length,tonnage,paomao_date,-- qimao_date,mao_days,telephone,break_rules
+							(CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END) length1,
+							(CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) tonnage1,
+							(CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END) paomao_date1,
+							(CASE WHEN t.target_port is NULL THEN '无'  ELSE t.target_port  END) target_port1,
+							(CASE WHEN t.qimao_date is NULL THEN '1900-1-1'  ELSE t.qimao_date  END) qimao_date1,
+							(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END) mao_days1,
+							(CASE WHEN ts.telephone is NULL THEN '无'  ELSE ts.telephone  END) telephone1,
+							(CASE WHEN ts.break_rules is NULL THEN '无'  ELSE ts.break_rules  END) break_rules1
+
+			FROM
+						(select tm.*,tp.target_port from
+								(select name,min(mao_date) paomao_date,max(mao_date) qimao_date,max(mao_date)-min(mao_date)+1 mao_days
+												from table_mao t group by t.name) tm
+												left JOIN table_port tp
+												on tm.name=tp.name and (tm.qimao_date=tp.mao_date or tm.qimao_date+1=tp.mao_date)
+												)  t,
+						table_others ts
+			where t.name=ts.name
+ON DUPLICATE KEY UPDATE
+			length = (CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END),
+			tonnage = (CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) ,
+			telephone = (CASE WHEN ts.telephone is NULL THEN '无'  ELSE ts.telephone  END),
+			break_rules = (CASE WHEN ts.break_rules is NULL THEN '无'  ELSE ts.break_rules  END),
+			anchor_date = (CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END),
+			target_port =  (CASE WHEN t.target_port is NULL THEN '无'  ELSE t.target_port  END),
+			weigh_date = (CASE WHEN t.qimao_date is NULL THEN '1900-1-1'  ELSE t.qimao_date  END),
+			anchor_days =(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END)
+    </insert>
+
 </mapper>
 
