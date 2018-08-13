@@ -28,7 +28,7 @@
                 <a class="btn btn-default" id="show">全部显示</a>
             </div>
             <div class="col-xs-4">
-                <a class="btn btn-primary">刷新</a>
+                <a class="btn btn-primary" id="ship_list_update">刷新</a>
             </div>
             <div class="col-xs-3">
                 <div class="form-group has-feedback">
@@ -81,6 +81,7 @@
 </div>
 <script src="js/ship_list.js"></script>
 <script src="js/ship_search.js"></script>
+<script src="js/data_refresh.js"></script>
 <script>
 var pno;
 var pageSize=5;
@@ -89,6 +90,7 @@ loadShipByPage(1,pageSize);
 
 //点击按钮刷新页面
 $("#ship_list_update").click(function(){
+	shipDataRefresh();
 	loadShipByPage(1,pageSize);
 });
 
