@@ -29,7 +29,7 @@
 							(CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END) length1,
 							(CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) tonnage1,
 							(CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END) paomao_date1,
-							(CASE WHEN t.target_port is NULL THEN '无'  ELSE t.target_port  END) target_port1,
+							(CASE WHEN t.target_port is NULL THEN '-'  ELSE t.target_port  END) target_port1,
 							(CASE WHEN t.qimao_date is NULL THEN '1900-1-1'  ELSE t.qimao_date  END) qimao_date1,
 							(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END) mao_days1,
 							(CASE WHEN ts.telephone is NULL THEN '无'  ELSE ts.telephone  END) telephone1,
@@ -50,7 +50,7 @@ ON DUPLICATE KEY UPDATE
 			telephone = (CASE WHEN ts.telephone is NULL THEN '无'  ELSE ts.telephone  END),
 			break_rules = (CASE WHEN ts.break_rules is NULL THEN '无'  ELSE ts.break_rules  END),
 			anchor_date = (CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END),
-			target_port =  (CASE WHEN t.target_port is NULL THEN '无'  ELSE t.target_port  END),
+			target_port =  (CASE WHEN t.target_port is NULL THEN '-'  ELSE t.target_port  END),
 			weigh_date = (CASE WHEN t.qimao_date is NULL THEN '1900-1-1'  ELSE t.qimao_date  END),
 			anchor_days =(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END)
     </insert>
