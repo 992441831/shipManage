@@ -14,17 +14,13 @@
             LIMIT #{offset},#{pageSize}
     </select>
 
+	<!--查询总记录数-->
     <select id="queryCount" resultType="Integer"
             parameterType="java.util.HashMap">
         SELECT count(*) FROM shipManage sm where  1=1
 		<if test="name!=null">
 			AND sm.name=#{name}
 		</if>
-    </select>
-
-    <select id="queryShipByName" resultType="java.util.HashMap"
-            parameterType="java.util.HashMap">
-        select * from shipmanage sm where sm.name=#{name}
     </select>
 
     <!--用于数据库刷新数据,从三张表中获取数据，并加上业务逻辑后插入到 终表中-->

@@ -49,24 +49,7 @@ public class ShipManageService {
         }
         return result;
     }
-    /**
-     * 根据名字获取船舶信息
-     * @author yc
-     * @since 2018/8/4
-     * */
-    public Map queryShipByName(Map paramMap) {
-        Map result = new HashMap();
-        try{
-            Map shipObj = shipManageMapper.queryShipByName(paramMap);
-            result.put("shipObj",shipObj);
-            result.put("status", 0);
-            result.put("msg", "查询成功");
-        }catch(Exception e) {
-            e.printStackTrace();
-            result.put("msg", "程序异常:查询失败error:"+e.getMessage());
-        }
-        return result;
-    }
+
     /**
      * 数据库后台刷新数据
      * @author yc

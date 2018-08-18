@@ -51,29 +51,6 @@ public class ShipManageController {
     }
 
     /**
-     * 根据船名获取船舶信息
-     * @param request
-     * @param response
-     * @return
-     * @throws Exception
-     */
-    @RequestMapping(value = "/queryShipByName.do",method = RequestMethod.GET)
-    @ResponseBody
-    public  Object queryShipByName(HttpServletRequest request,
-                            HttpServletResponse response) throws Exception {
-        response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
-        Map reusltMap = new HashMap();
-        // 取查询条件
-        Map paramMap =  GetParamUtil.getRequestParamMap(request);
-        try{
-            reusltMap = shipManageService.queryShipByName(paramMap);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return reusltMap;
-    }
-
-    /**
      * 导出船舶信息
      * @param request
      * @param response

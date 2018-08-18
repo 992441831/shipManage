@@ -14,7 +14,6 @@ public interface ShipManageMapper {
      * */
     public List<Ship> queryShip(Map paramMap);
     public int queryCount(Map paramMap);
-    public Map queryShipByName(Map paramMap);
     public void refreshData();
 
 }
