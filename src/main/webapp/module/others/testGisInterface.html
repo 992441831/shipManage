@@ -5,7 +5,7 @@
 <title>测试接口</title>
 <script type="text/javascript" src="../../static/jquery/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
-//按网格移动地址
+//
 function test(){
 	$.ajax({
 		type: "get",
@@ -13,7 +13,8 @@ function test(){
 		url:"/shipManage/module/shipManage/queryShip.do",
 		data:{
 			pno:     1,
-			pageSize: 5
+			pageSize: 5,
+			name:"鑫光99"
 			},
 		success: function(result) 
 		{
@@ -109,7 +110,7 @@ function test4(){
 </head>
 <body>
 
-	<input type="button" onclick="test4();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
+	<input type="button" onclick="test();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
 
 <div id="div"></div>
 </body>
