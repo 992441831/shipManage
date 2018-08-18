@@ -7,10 +7,11 @@
 function loadShipByPage(pno1,pageSize1){
 	pageSize=pageSize1;
 	pno=pno1;
+	pattern=1;
 $.ajax({
     type:"GET",
-    url:"http://localhost:8080/shipManage/module/shipManage/queryShip.do",
-    data:{"pno":pno,"pageSize":pageSize},
+    url:"/shipManage/module/shipManage/queryShip.do",
+    data:{pno:pno,pageSize:pageSize},
     success:function(data){
         //*3:动态创建表格中多行 id="tbody1"
     	//console.log(data);
@@ -38,22 +39,22 @@ $.ajax({
       var html = "";
       //上上一页
      
-      if(data.pno-2>0){
-       html += `<li><a href="#">${data.pno-2}</a></li>`;
+      if(pno-2>0){
+       html += '<li><a href="#">'+(pno-2)+'</a></li>';
       }
       //上一页 10:53--11:03
-      if(data.pno-1>0){
-      html += `<li><a href="#">${data.pno-1}</a></li>`;
+      if(pno-1>0){
+      html += '<li><a href="#">'+(pno-1)+'</a></li>';
       }
       //当前页
-      html += `<li class="active"><a href="#">${data.pno}</a></li>`;
+      html += '<li class="active"><a href="#">'+pno+'</a></li>';
       //下一页
-      if(data.pno+1<=data.pageCount){
-      html += `<li><a href="#">${data.pno+1}</a></li>`;
+      if(pno+1<=data.pageCount){
+      html += '<li><a href="#">'+(pno+1)+'</a></li>';
       }
       //下下一页
-      if(data.pno+2<=data.pageCount){
-        html += `<li><a href="#">${data.pno+2}</a></li>`;
+      if(pno+2<=data.pageCount){
+        html += '<li><a href="#">'+(pno+2)+'</a></li>';
       }
       $("#pagination").html(html);
     },
@@ -62,8 +63,6 @@ $.ajax({
     }
 })
 };
-
-
 
 
 

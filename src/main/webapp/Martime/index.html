@@ -85,36 +85,44 @@
 <script>
 var pno;
 var pageSize=5;
+var name;
+var pattern;
 //默认调用第一页
 loadShipByPage(1,pageSize);
+
 
 //点击按钮刷新页面
 $("#ship_list_update").click(function(){
 	shipDataRefresh();
-	loadShipByPage(1,pageSize);
+	loadShipByPage(pno,pageSize);
+	
 });
-
+//1:获取上限输入input绑定事件 keyup   11:40--11:45
+$("#ship-kw").keyup(function(e){
+  //2:获取上限 下限 关键字
+  name = $("#ship-kw").val();
+  //3:如果当前用户输入 enter
+  if(e.keyCode==13) {
+      //4:调用
+  	//console.log(name);
+    searchShipByName(pno,pageSize,name);
+  }
+});
 //为分页条中每个页码添加点击事件
 $("#pagination").on("click","li a",function(e){
     //7.1 阻止事件默认行为
     e.preventDefault();//a submit 都要阻止默认行为
     //7.2 获取当元素页码
     pno = parseInt($(this).html());
-    //8:不同页码调用 loadProductByPage()
-    loadShipByPage(pno,pageSize);
-});
+    if(pattern==1){
+    	 //8:不同页码调用 loadProductByPage()
+        loadShipByPage(pno,pageSize);
+    }else if(pattern==0){
+    	 //8:不同页码调用 loadProductByPage()
+        searchShipByName(pno,pageSize,name);
+    }   
+}); 
 
-//1:获取上限输入input绑定事件 keyup   11:40--11:45
-$("#ship-kw").keyup(function(e){
-  //2:获取上限 下限 关键字
-  var name = $("#ship-kw").val();
-  //3:如果当前用户输入 enter
-  if(e.keyCode==13) {
-      //4:调用
-  	console.log(name);
-      searchShipByName(name);
-  }
-});
 
 //全部显示
 $("#show").click(function(){
@@ -123,9 +131,6 @@ $("#show").click(function(){
 
 //导出
 $("#export").on("click",function(){
-	console.log("当前页面");
-	  console.log(pno);
-	  console.log(pageSize);
 	  $(this).attr("href","/shipManage/module/shipManage/dataExport.do?pno="+pno+"&pageSize="+pageSize+"");
 })
   
