@@ -33,8 +33,10 @@ public class ShipManageService {
             int count = shipManageMapper.queryCount(paramMap);
             int pageCount = new Double(Math.ceil((count/(pageSize*1.0)))).intValue();
 
-            result.put("list", list);
-            result.put("pageCount", pageCount);
+            result.put("list", list);                //查询的船的信息列表
+            result.put("pageCount", pageCount);     //总页数
+
+            //前端要求，将参数回传，为了偷懒，也是醉了
             result.put("pno", pno);
             result.put("pageSize", pageSize);
 

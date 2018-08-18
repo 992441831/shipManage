@@ -7,12 +7,19 @@
     <!-- 查询船舶信息 -->
     <select id="queryShip" resultType="com.ai.frame.export.Ship"
             parameterType="java.util.HashMap">
-           select * from shipmanage LIMIT #{offset},#{pageSize}
+           select * from shipmanage sm where  1=1
+			<if test="name!=null">
+				AND sm.name=#{name}
+			</if>
+            LIMIT #{offset},#{pageSize}
     </select>
 
     <select id="queryCount" resultType="Integer"
             parameterType="java.util.HashMap">
-        SELECT count(*) FROM shipManage
+        SELECT count(*) FROM shipManage sm where  1=1
+		<if test="name!=null">
+			AND sm.name=#{name}
+		</if>
     </select>
 
     <select id="queryShipByName" resultType="java.util.HashMap"
@@ -29,7 +36,7 @@
 							(CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END) length1,
 							(CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) tonnage1,
 							(CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END) paomao_date1,
-							(CASE WHEN t.target_port is NULL THEN '无'  ELSE t.target_port  END) target_port1,
+							(CASE WHEN t.target_port is NULL THEN '-'  ELSE t.target_port  END) target_port1,
 							(CASE WHEN t.qimao_date is NULL THEN '1900-1-1'  ELSE t.qimao_date  END) qimao_date1,
 							(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END) mao_days1,
 							(CASE WHEN ts.telephone is NULL THEN '无'  ELSE ts.telephone  END) telephone1,
