@@ -151,4 +151,31 @@ public class ShipManageController {
         return reusltMap;
     }
 
+    /*
+     * 测试获取抛锚日期的方法
+     * @param request
+     * @param response
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/test.do",method = RequestMethod.GET)
+    @ResponseBody
+    public  Object test(HttpServletRequest request,
+                             HttpServletResponse response) throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
+        // 取查询条件
+        Map paramMap =  GetParamUtil.getRequestParamMap(request);
+        Map reusltMap = new HashMap();
+        try{
+            shipManageService.getWeighDate();
+        } catch (Exception e) {
+            e.printStackTrace();
+            reusltMap.put("status",1);
+            reusltMap.put("msg","请求失败");
+        }
+        reusltMap.put("status",0);
+        reusltMap.put("msg","请求成功");
+        return reusltMap;
+    }
+
 }

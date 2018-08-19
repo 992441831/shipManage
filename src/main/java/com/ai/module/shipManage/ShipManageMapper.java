@@ -2,6 +2,7 @@ package com.ai.module.shipManage;
 
 import com.ai.frame.export.Ship;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -15,5 +16,9 @@ public interface ShipManageMapper {
     public List<Ship> queryShip(Map paramMap);
     public int queryCount(Map paramMap);
     public void refreshData();
+
+    public List<Map> queryMaxMinDate();
+    public List<Date> queryEveryDate(String name);
+    public void insertAnchorage(Anchorage an);
 
 }
