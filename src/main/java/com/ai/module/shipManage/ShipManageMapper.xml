@@ -45,11 +45,10 @@
 
     <!--用于数据库刷新数据,从三张表中获取数据，并加上业务逻辑后插入到 终表中-->
     <insert id="refreshData">
--- 测试插入
 	insert into shipmanage
 						(create_date,name,length,tonnage,anchor_date,target_port,weigh_date,anchor_days,telephone,break_rules,nameAndDate)
 			select
-							(CASE WHEN t.mao_date is NULL THEN '1900-1-1'  ELSE t.mao_date  END) mao_date1,
+							(CASE WHEN t.mao_date is NULL THEN t.qimao_date  ELSE t.mao_date  END) mao_date1,
 							t.name,
 							-- length,tonnage,paomao_date,-- qimao_date,mao_days,telephone,break_rules
 							(CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END) length1,
@@ -61,6 +60,7 @@
 							(CASE WHEN ts.telephone is NULL THEN '-'  ELSE ts.telephone  END) telephone1,
 							(CASE WHEN ts.break_rules is NULL THEN '-'  ELSE ts.break_rules  END) break_rules1,
 							t.nameAndDate
+
 			FROM
 						(select tm.*,tp.target_port,tp.mao_date from
 								(select name,anchor_date paomao_date,weigh_date qimao_date,anchor_days mao_days,nameAndDate
@@ -72,7 +72,7 @@
 						tab_vessels ts
 			on t.name=ts.name
 	ON DUPLICATE KEY UPDATE
-			create_date = (CASE WHEN t.mao_date is NULL THEN '1900-1-1'  ELSE t.mao_date  END),
+			create_date = (CASE WHEN t.mao_date is NULL THEN t.qimao_date  ELSE t.mao_date  END),
 			length = (CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END),
 			tonnage = (CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) ,
 			telephone = (CASE WHEN ts.telephone is NULL THEN '-'  ELSE ts.telephone  END),
