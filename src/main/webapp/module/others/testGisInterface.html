@@ -6,15 +6,15 @@
 <script type="text/javascript" src="../../static/jquery/jquery-1.7.2.min.js"></script>
 <script type="text/javascript">
 //
-function test(){
+function test1(){
 	$.ajax({
 		type: "get",
 		dataType: "json",
 		url:"/shipManage/module/shipManage/queryShip.do",
 		data:{
+			dataStr:'2018-03-14',
 			pno:     1,
-			pageSize: 5,
-			name:"鑫光99"
+			pageSize: 4
 			},
 		success: function(result) 
 		{
@@ -33,50 +33,20 @@ function test(){
 	});
 }
 
-function test2(){
-	$.ajax({
-		type: "get",
-		dataType: "json",
-		url:"/shipManage/module/shipManage/queryShipByName.do",
-		data:{
-			name: '曙光惠明'
-		},
-		success: function(result)
-		{
-			console.log(result);
-			var status=result.status;
-			var res = $("#div");
-			if(status==0){
-				alert(result.msg);
-				res.append(JSON.stringify(result.newAddr));
-				res.append("<br>");
-			}
-		},
-		error: function(result) {
-			alert("发送请求失败:状态码" + result.status);
-		}
-	});
-}
-
+//导出不好不要用ajax，用超链接
 function test3(){
 	$.ajax({
 		type: "get",
 		//dataType: "json",
 		url:"/shipManage/module/shipManage/dataExport.do",
 		data:{
+			dataStr:'2018-03-14',
 			pno:     1,
-			pageSize: 5
+			pageSize: 4
 		},
 		success: function(result)
 		{
-			console.log(result);
-			var status=result.status;
-			var res = $("#div");
-			if(status==0){
-				alert(result.msg);
-				res.append(JSON.stringify(result.newAddr));
-				res.append("<br>");
-			}
+			console.log("下载成功，请用超链接而显示弹窗");
 		},
 		error: function(result) {
 			alert("发送请求失败:状态码" + result.status);
@@ -133,8 +103,9 @@ function test5(){
 </head>
 <body>
 
-	<input type="button" onclick="test4();" value="测试" id="testBtn" style="margin-left:5px;"/><br/><br/>
-
-<div id="div"></div>
+	<input type="button" onclick="test1();" value="按锚定日期查询船舶信息" id="testBtn1" style="margin-left:5px;"/><br/><br/>
+	<input type="button" onclick="test3();" value="导出数据" id="testBtn3" style="margin-left:5px;"/><br/><br/>
+	<input type="button" onclick="test4();" value="刷新数据" id="testBtn4" style="margin-left:5px;"/><br/><br/>
+	<div id="div"></div>
 </body>
 </html>

@@ -1,11 +1,13 @@
 package com.ai.module.shipManage;
 
 import com.ai.frame.export.Ship;
+import com.ai.module.others.Anchorage;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 
-import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Date;
 
@@ -14,6 +16,7 @@ import java.util.Date;
 public class ShipManageService {
     @Resource
     private ShipManageMapper shipManageMapper;
+    int status = 0;       //是否处于锚定状态，0为非锚定状态，1为锚定状态
 
     /**
      * 获取船舶基本信息列表
@@ -24,30 +27,31 @@ public class ShipManageService {
      * */
     public Map queryShip(Map paramMap) {
         Map result = new HashMap();
-        int pno = Integer.valueOf(paramMap.get("pno").toString());    //当前页码
-        int pageSize = Integer.valueOf(paramMap.get("pageSize").toString());//每页显示记录条数
-        int offset = (pno-1)*pageSize;
-        paramMap.put("offset",offset);
-        paramMap.put("pageSize",pageSize);
         try{
-            List<Ship> list = shipManageMapper.queryShip(paramMap);
             int count = shipManageMapper.queryCount(paramMap);
-            int pageCount = new Double(Math.ceil((count/(pageSize*1.0)))).intValue();
+            //如果不传入页码和每页记录数，意味着不需要分页，也就没有总页数
+            if(paramMap.get("pno")!=null&&paramMap.get("pageSize")!=null&&!paramMap.get("pno").equals("")&&!paramMap.get("pageSize").equals("")){
+                int pno = Integer.valueOf(paramMap.get("pno").toString());    //当前页码
+                int pageSize = Integer.valueOf(paramMap.get("pageSize").toString());//每页显示记录条数
+                int offset = (pno-1)*pageSize;
+                paramMap.put("offset",offset);
+                paramMap.put("pageSize",pageSize);
+                System.out.println("paramMap"+paramMap);
+                int pageCount = new Double(Math.ceil((count/(pageSize*1.0)))).intValue();
+                result.put("pageCount", pageCount);     //总页数
+            }
 
+            List<Ship> list = shipManageMapper.queryShip(paramMap);
             result.put("list", list);                //查询的船的信息列表
-            result.put("pageCount", pageCount);     //总页数
 
-            //前端要求，将参数回传，为了偷懒，也是醉了
-            result.put("pno", pno);
-            result.put("pageSize", pageSize);
-
-            result.put("status", 0);
-            result.put("msg", "查询成功");
         }catch(Exception e) {
             e.printStackTrace();
             result.put("status", -1);
             result.put("msg", "程序异常:查询失败error:"+e.getMessage());
         }
+
+        result.put("status", 0);
+        result.put("msg", "查询成功");
         return result;
     }
 
@@ -86,6 +90,7 @@ public class ShipManageService {
         for(Map da:dateList){
             Calendar c1=Calendar.getInstance();
             Calendar c2=Calendar.getInstance();
+            Calendar c3 = Calendar.getInstance(); //获取当前日期
             name = (String)da.get("name");
             mao_date = (List< java.sql.Date >)shipManageMapper.queryEveryDate(name);
             min = (java.sql.Date) da.get("min");
@@ -97,12 +102,12 @@ public class ShipManageService {
             int k=0;        //用于判断锚定日期是否连续
             int l=0;        //用于判断中断日期是否连续
             Anchorage an = new Anchorage();
-            an.name = name;
+            an.setName(name);
             //抛锚日期
-            an.anchor_date = new java.sql.Date(min.getTime());
+            an.setAnchor_date(new java.sql.Date(min.getTime()));
             for(int i=0;i<dayOffset;i++){
                 c2.setTime(mao_date.get(j));
-                System.out.println("c1.compareTo(c2):"+c1.compareTo(c2));
+                //System.out.println("c1.compareTo(c2):"+c1.compareTo(c2));
                 if(c1.compareTo(c2)==0){
                     j++;
                     k++;
@@ -110,41 +115,65 @@ public class ShipManageService {
                     if(k==2){
                         //抛锚日期
                         c2.add(Calendar.DAY_OF_MONTH, -1);
-                        an.anchor_date = new java.sql.Date(c2.getTime().getTime());
+                        an.setAnchor_date(new java.sql.Date(c2.getTime().getTime()));
                         c2.add(Calendar.DAY_OF_MONTH, 1);
                     }
                 }else{
                     l++;
                     if(l==1){
                         c2.setTime(mao_date.get(j-1));
-                        //设置对象属性
+                        //设置对象属性，并插入数据
                         setAnObj(an,c2.getTime(),k,name);
                         c2.setTime(mao_date.get(j));
                     }
                     k=0;
                 }
-                System.out.println("i,j,k,l:"+i+j+k+l);
+                //System.out.println("i,j,k,l:"+i+j+k+l);
                 c1.add(Calendar.DAY_OF_MONTH, 1);//最小日期
-                //对最后一批数据进行处理
-                if(i==dayOffset-1){
-                    //设置对象属性
+                //对数据的最后一天进行处理,如果最后一天不是今天，那么最后一天这天肯定起锚了
+                //&&max.compareTo()
+                if(i==dayOffset-1&&calcDayOffset(max,c3.getTime())!=0){
+                    //设置对象属性，并插入数据
                     setAnObj(an,max,k,name);
+                }
+                //如果最后一天等于今天，那么这艘船处于锚定状态，将起锚日期设置为无限大，方便查询
+                if(i==dayOffset-1&&calcDayOffset(max,c3.getTime())==0){
+                    System.out.println("我为锚定状态");
+                    System.out.println(an.toString());
+                    status = 1;   //设置为锚定状态
+                    //设置对象属性，并插入数据
+                    setAnObj(an,max,k,name);
+                    status = 0;
                 }
             }
         }
     }
 
-    //设置对象属性
+    //设置对象属性，并插入数据
     public void setAnObj(Anchorage an,Date date,int k,String name){
         if(k==1){
             //如果只连续一次就中断了，抛锚日期就和起锚日期是同一天
+            //或者是今天刚抛锚还没起锚，抛锚日期等于记录日期的最后一天
             //抛锚日期
-            an.anchor_date = new java.sql.Date(date.getTime());
+            an.setAnchor_date(new java.sql.Date(date.getTime()));
         }
-        //起锚日期
-        an.weigh_date = new java.sql.Date(date.getTime());
-        an.anchor_days = k;
-        an.nameAndDate = name+an.weigh_date;
+        if(status == 1){
+            //锚定状态，起锚日期不确定，为了方便查询被设置为无限大
+            String dateStr = "2118-1-1";
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            try {
+                date = sdf.parse(dateStr);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            //起锚日期
+            an.setWeigh_date(new java.sql.Date(date.getTime()));
+        }else{
+            //起锚日期
+            an.setWeigh_date(new java.sql.Date(date.getTime()));
+        }
+        an.setAnchor_days(k);
+        an.setNameAndDate(name+an.getAnchor_date());
         insertAn(an);
     }
 

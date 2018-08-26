@@ -68,7 +68,7 @@ public class ShipManageController {
         Map listMap = new HashMap();
         ExportExcel<Ship> exp = new ExportExcel<Ship>();
         String[] headers =
-                { "id", "创建日期", "船舶名称", "船舶长度", "吨位","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况" };
+                { "id", "进港日期", "船舶名称", "船舶长度", "吨位","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况"};
         List<Ship> dataset = new ArrayList<Ship>();
         String fileName = "shipMessage.xls";
         String fileDir = conf.getProperty("fileDir");
@@ -80,9 +80,11 @@ public class ShipManageController {
         Map paramMap =  GetParamUtil.getRequestParamMap(request);
         try{
             listMap = shipManageService.queryShip(paramMap);
+            System.out.println(listMap.get("list"));
             if(listMap.get("status").toString().equals("0")){
                 List<Ship> list=  (List)listMap.get("list");
                 for(Ship ship : list){
+                    System.out.println(ship);
                     dataset.add(ship);
                 }
                 exp.exportExcel(headers, dataset, out);
@@ -115,7 +117,7 @@ public class ShipManageController {
             response.reset();
             // 设置response的Header
             response.addHeader("Content-Disposition", "attachment;filename="
-                    + new String(filename.getBytes()));
+                    + new String(filename.getBytes("GBK"),"iso-8859-1"));
             response.addHeader("Content-Length", "" + file.length());
             OutputStream toClient = new BufferedOutputStream(
                     response.getOutputStream());

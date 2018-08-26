@@ -7,17 +7,44 @@
     <!-- 查询船舶信息 -->
     <select id="queryShip" resultType="com.ai.frame.export.Ship"
             parameterType="java.util.HashMap">
-           select * from shipmanage sm where  1=1
-			<if test="name!=null">
-				AND sm.name=#{name}
-			</if>
+		select id,
+				access_port_date,
+				name,
+				length,
+				tonnage,
+				anchor_date,
+				target_port,
+				weigh_date,
+				anchor_days,
+				telephone,
+				break_rules
+		from shipmanage sm  where  1=1
+		<if test="dataStr!=null">
+			and DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.anchor_date)&gt;=0
+			and  DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.weigh_date)&lt;=0
+		</if>
+		<if test="dataStr==null">
+			and DATEDIFF(NOW(),sm.anchor_date)&gt;=0 and  DATEDIFF(NOW(),sm.weigh_date)&lt;=0
+		</if>
+		<if test="name!=null">
+			AND sm.name=#{name}
+		</if>
+		<if test="pageSize!=null">
             LIMIT #{offset},#{pageSize}
+		</if>
     </select>
 
 	<!--查询总记录数-->
     <select id="queryCount" resultType="Integer"
             parameterType="java.util.HashMap">
         SELECT count(*) FROM shipManage sm where  1=1
+		<if test="dataStr!=null">
+			and DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.anchor_date)&gt;=0
+			and  DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.weigh_date)&lt;=0
+		</if>
+		<if test="dataStr==null">
+			and DATEDIFF(NOW(),sm.anchor_date)&gt;=0 and  DATEDIFF(NOW(),sm.weigh_date)&lt;=0
+		</if>
 		<if test="name!=null">
 			AND sm.name=#{name}
 		</if>
@@ -35,20 +62,26 @@
 		select mao_date
 			from tab_anchorage_res t where name=#{name} ORDER by mao_date
 	</select>
-	<insert id="insertAnchorage" parameterType="com.ai.module.shipManage.Anchorage">
+
+
+	<!--对锚定日期临时表进行处理，插入到锚定日期正式表-->
+	<insert id="insertAnchorage" parameterType="com.ai.module.others.Anchorage">
 		INSERT into  tab_anchorage( name,anchor_date ,weigh_date ,anchor_days ,nameAndDate )
 			values (#{name},#{anchor_date},#{weigh_date},#{anchor_days},#{nameAndDate})
 		ON DUPLICATE KEY
-			update nameAndDate=#{nameAndDate};
+			update
+				anchor_date=#{anchor_date},
+				weigh_date=#{weigh_date},
+				anchor_days=#{anchor_days}
 	</insert>
 
 
     <!--用于数据库刷新数据,从三张表中获取数据，并加上业务逻辑后插入到 终表中-->
     <insert id="refreshData">
 	insert into shipmanage
-						(create_date,name,length,tonnage,anchor_date,target_port,weigh_date,anchor_days,telephone,break_rules,nameAndDate)
+						(access_port_date,name,length,tonnage,anchor_date,target_port,weigh_date,anchor_days,telephone,break_rules,nameAndDate)
 			select
-							(CASE WHEN t.mao_date is NULL THEN t.qimao_date  ELSE t.mao_date  END) mao_date1,
+							(CASE WHEN t.mao_date is NULL THEN '1900-1-1'  ELSE t.mao_date  END) mao_date1,
 							t.name,
 							-- length,tonnage,paomao_date,-- qimao_date,mao_days,telephone,break_rules
 							(CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END) length1,
@@ -71,8 +104,8 @@
 						LEFT JOIN
 						tab_vessels ts
 			on t.name=ts.name
-	ON DUPLICATE KEY UPDATE
-			create_date = (CASE WHEN t.mao_date is NULL THEN t.qimao_date  ELSE t.mao_date  END),
+ON DUPLICATE KEY UPDATE
+			access_port_date = (CASE WHEN t.mao_date is NULL THEN '1900-1-1'  ELSE t.mao_date  END),
 			length = (CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END),
 			tonnage = (CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) ,
 			telephone = (CASE WHEN ts.telephone is NULL THEN '-'  ELSE ts.telephone  END),

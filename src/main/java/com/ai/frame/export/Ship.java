@@ -7,7 +7,7 @@ import java.sql.Date;
  */
 public class Ship {
     int id;
-    Date create_date;
+    Date access_port_date;
     String name;
     Double length;
     Double tonnage;
@@ -17,10 +17,11 @@ public class Ship {
     int    anchor_days;
     String  telephone;
     String break_rules;
+    //String nameAndDate;
 
-    public Ship(int id, Date create_date, String name, Double length, Double tonnage, Date anchor_date, String target_port, Date weigh_date, int anchor_days, String telephone, String break_rules) {
+    public Ship(int id, Date access_port_date, String name, Double length, Double tonnage, Date anchor_date, String target_port, Date weigh_date, int anchor_days, String telephone, String break_rules) {
         this.id = id;
-        this.create_date = create_date;
+        this.access_port_date = access_port_date;
         this.name = name;
         this.length = length;
         this.tonnage = tonnage;
@@ -33,91 +34,90 @@ public class Ship {
     }
 
     public Ship() {
-
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Date getCreate_date() {
-        return create_date;
     }
 
     public int getId() {
         return id;
     }
 
-    public Double getLength() {
-        return length;
-    }
-
-    public Double getTonnage() {
-        return tonnage;
-    }
-
-    public Date getAnchor_date() {
-        return anchor_date;
-    }
-
-    public String getTarget_port() {
-        return target_port;
-    }
-
-    public Date getWeigh_date() {
-        return weigh_date;
-    }
-
-    public int getAnchor_days() {
-        return anchor_days;
-    }
-
-    public String getTelephone() {
-        return telephone;
-    }
-
-    public String getBreak_rules() {
-        return break_rules;
-    }
-
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setCreate_date(Date create_date) {
-        this.create_date = create_date;
+    public Date getAccess_port_date() {
+        return access_port_date;
+    }
+
+    public void setAccess_port_date(Date access_port_date) {
+        this.access_port_date = access_port_date;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public void setName(String name) {
         this.name = name;
     }
 
+    public Double getLength() {
+        return length;
+    }
+
     public void setLength(Double length) {
         this.length = length;
+    }
+
+    public Double getTonnage() {
+        return tonnage;
     }
 
     public void setTonnage(Double tonnage) {
         this.tonnage = tonnage;
     }
 
+    public Date getAnchor_date() {
+        return anchor_date;
+    }
+
     public void setAnchor_date(Date anchor_date) {
         this.anchor_date = anchor_date;
     }
 
-    public void setWeigh_date(Date weigh_date) {
-        this.weigh_date = weigh_date;
+    public String getTarget_port() {
+        return target_port;
     }
 
     public void setTarget_port(String target_port) {
         this.target_port = target_port;
     }
 
+    public Date getWeigh_date() {
+        return weigh_date;
+    }
+
+    public void setWeigh_date(Date weigh_date) {
+        this.weigh_date = weigh_date;
+    }
+
+    public int getAnchor_days() {
+        return anchor_days;
+    }
+
     public void setAnchor_days(int anchor_days) {
         this.anchor_days = anchor_days;
     }
 
+    public String getTelephone() {
+        return telephone;
+    }
+
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public String getBreak_rules() {
+        return break_rules;
     }
 
     public void setBreak_rules(String break_rules) {
@@ -128,7 +128,7 @@ public class Ship {
     public String toString() {
         return "Ship{" +
                 "id=" + id +
-                ", create_date=" + create_date +
+                ", access_port_date=" + access_port_date +
                 ", name='" + name + '\'' +
                 ", length=" + length +
                 ", tonnage=" + tonnage +
