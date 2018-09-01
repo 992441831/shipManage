@@ -42,13 +42,33 @@ public class ShipManageController {
         // 取查询条件
         Map paramMap =  GetParamUtil.getRequestParamMap(request);
         Map reusltMap = new HashMap();
-        //paramMap.put("pno",2);
-        //paramMap.put("pageSize",5);
+        Object dataStr = paramMap.get("dataStr");
+        List<Ship> list =null;
+        if(dataStr==null||dataStr.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","dataStr不能为空");
+            return reusltMap;
+        }
+        String[] strs = ((String)dataStr).split("-");
+        if(strs.length!=3){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","日期样式须为yyyy-mm-dd");
+            return reusltMap;
+        }
         try{
-            reusltMap = shipManageService.queryShip(paramMap);
+            list = shipManageService.queryShip(paramMap);
+        } catch (DataIntegrityViolationException e) {
+            reusltMap.put("status",1);
+            reusltMap.put("msg","输入日期不对，请核查");
+            return reusltMap;
         } catch (Exception e) {
             e.printStackTrace();
+            reusltMap.put("status", 1);
+            reusltMap.put("msg", "程序异常:查询失败error:"+e.getMessage());
         }
+        reusltMap.put("list", list);
+        reusltMap.put("status", 0);
+        reusltMap.put("msg", "查询成功");
         return reusltMap;
     }
 
@@ -61,13 +81,12 @@ public class ShipManageController {
      */
     @RequestMapping(value = "/dataExport.do",method = RequestMethod.GET)
     //@ResponseBody
-    public void dataExport(HttpServletRequest request,
+    public Object dataExport(HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
         response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
         Config conf = Config.getInstance();
 
         Map reusltMap = new HashMap();
-        Map listMap = new HashMap();
         ExportExcel<Ship> exp = new ExportExcel<Ship>();
         String[] headers =
                 { "id", "进港日期", "船舶名称", "船舶长度", "吨位","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况"};
@@ -80,27 +99,30 @@ public class ShipManageController {
         OutputStream out = new FileOutputStream(path);
         // 取查询条件
         Map paramMap =  GetParamUtil.getRequestParamMap(request);
+        paramMap.remove("pno");
+        paramMap.remove("pageSize");
         try{
-            listMap = shipManageService.queryShip(paramMap);
-            System.out.println(listMap.get("list"));
-            if(listMap.get("status").toString().equals("0")){
-                List<Ship> list=  (List)listMap.get("list");
-                for(Ship ship : list){
-                    System.out.println(ship);
-                    dataset.add(ship);
-                }
-                exp.exportExcel(headers, dataset, out);
-                out.close();
-                reusltMap.put("status", 0);
-                reusltMap.put("msg", "下载成功");
-            }else{
-
+            List<Ship> list = shipManageService.queryShip(paramMap);
+            for(Ship ship : list){
+                System.out.println(ship);
+                dataset.add(ship);
             }
+            exp.exportExcel(headers, dataset, out);
+            out.close();
+            download(path,response);
+            reusltMap.put("status", 0);
+            reusltMap.put("msg", "下载成功");
+        } catch (DataIntegrityViolationException e) {
+            reusltMap.put("status",1);
+            reusltMap.put("msg","输入日期不对，请核查");
+            return reusltMap;
         } catch (Exception e) {
             e.printStackTrace();
+            reusltMap.put("status", 1);
+            reusltMap.put("msg", "程序异常:查询失败error:"+e.getMessage());
+            return reusltMap;
         }
-        download(path,response);
-        //return reusltMap;
+        return reusltMap;
     }
 
     //弹窗下载

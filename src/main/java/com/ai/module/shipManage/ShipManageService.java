@@ -25,34 +25,26 @@ public class ShipManageService {
      * 入参：pno      当前页码
      *       pageSize  每页显示记录条数
      * */
-    public Map queryShip(Map paramMap) throws Exception {
+    public List<Ship> queryShip(Map paramMap) throws Exception {
         Map result = new HashMap();
-        try{
-            int count = shipManageMapper.queryCount(paramMap);
-            //如果不传入页码和每页记录数，意味着不需要分页，也就没有总页数
-            if(paramMap.get("pno")!=null&&paramMap.get("pageSize")!=null&&!paramMap.get("pno").equals("")&&!paramMap.get("pageSize").equals("")){
-                int pno = Integer.valueOf(paramMap.get("pno").toString());    //当前页码
-                int pageSize = Integer.valueOf(paramMap.get("pageSize").toString());//每页显示记录条数
-                int offset = (pno-1)*pageSize;
-                paramMap.put("offset",offset);
-                paramMap.put("pageSize",pageSize);
-                System.out.println("paramMap"+paramMap);
-                int pageCount = new Double(Math.ceil((count/(pageSize*1.0)))).intValue();
-                result.put("pageCount", pageCount);     //总页数
-            }
 
-            List<Ship> list = shipManageMapper.queryShip(paramMap);
-            result.put("list", list);                //查询的船的信息列表
-
-        }catch(Exception e) {
-            e.printStackTrace();
-            result.put("status", -1);
-            result.put("msg", "程序异常:查询失败error:"+e.getMessage());
+        int count = shipManageMapper.queryCount(paramMap);
+        //如果不传入页码和每页记录数，意味着不需要分页，也就没有总页数
+        if(paramMap.get("pno")!=null&&paramMap.get("pageSize")!=null&&!paramMap.get("pno").equals("")&&!paramMap.get("pageSize").equals("")){
+            int pno = Integer.valueOf(paramMap.get("pno").toString());    //当前页码
+            int pageSize = Integer.valueOf(paramMap.get("pageSize").toString());//每页显示记录条数
+            int offset = (pno-1)*pageSize;
+            paramMap.put("offset",offset);
+            paramMap.put("pageSize",pageSize);
+            System.out.println("paramMap"+paramMap);
+            int pageCount = new Double(Math.ceil((count/(pageSize*1.0)))).intValue();
+            result.put("pageCount", pageCount);     //总页数
         }
 
-        result.put("status", 0);
-        result.put("msg", "查询成功");
-        return result;
+        List<Ship> list = shipManageMapper.queryShip(paramMap);
+        result.put("list", list);                //查询的船的信息列表
+
+        return list;
     }
 
     /**
