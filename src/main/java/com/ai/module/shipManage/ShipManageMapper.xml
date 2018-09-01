@@ -116,5 +116,18 @@ ON DUPLICATE KEY UPDATE
 			anchor_days =(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END)
     </insert>
 
+	<!--插入到锚定日期原始表：tab_anchorage_res-->
+	<insert id="insertAnchorageSource" parameterType="java.util.HashMap">
+		INSERT into tab_anchorage_res (mao_date,name) values(#{mao_date},#{name})
+	</insert>
+	<!--插入到锚定日期原始表：tab_wharfs-->
+	<insert id="insertWharfsSource" parameterType="java.util.HashMap">
+		INSERT into tab_wharfs (mao_date,name,target_port) values(#{mao_date},#{name},#{target_port})
+	</insert>
+	<!--插入到锚定日期原始表：tab_vessels-->
+	<insert id="insertVesselsSource" parameterType="java.util.HashMap">
+		INSERT into tab_vessels (name,telephone,length,tonnage,break_rules) values(#{name},#{telephone},#{length},#{tonnage},#{break_rules})
+	</insert>
+
 </mapper>
 

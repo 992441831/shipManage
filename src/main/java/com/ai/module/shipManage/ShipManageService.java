@@ -25,7 +25,7 @@ public class ShipManageService {
      * 入参：pno      当前页码
      *       pageSize  每页显示记录条数
      * */
-    public Map queryShip(Map paramMap) {
+    public Map queryShip(Map paramMap) throws Exception {
         Map result = new HashMap();
         try{
             int count = shipManageMapper.queryCount(paramMap);
@@ -60,7 +60,7 @@ public class ShipManageService {
      * @author yc
      * @since 2018/8/4
      * */
-    public Map refreshData(Map paramMap) {
+    public Map refreshData(Map paramMap) throws Exception{
         Map result = new HashMap();
 
         try{
@@ -76,7 +76,7 @@ public class ShipManageService {
         return result;
     }
 
-    public void getWeighDate(){
+    public void getWeighDate() throws Exception{
         List buffer = new ArrayList();
         //根据业务逻辑找到抛锚和起锚日期
         //连续的日期被认为是一段锚定日期
@@ -138,8 +138,6 @@ public class ShipManageService {
                 }
                 //如果最后一天等于今天，那么这艘船处于锚定状态，将起锚日期设置为无限大，方便查询
                 if(i==dayOffset-1&&calcDayOffset(max,c3.getTime())==0){
-                    System.out.println("我为锚定状态");
-                    System.out.println(an.toString());
                     status = 1;   //设置为锚定状态
                     //设置对象属性，并插入数据
                     setAnObj(an,max,k,name);
@@ -150,7 +148,7 @@ public class ShipManageService {
     }
 
     //设置对象属性，并插入数据
-    public void setAnObj(Anchorage an,Date date,int k,String name){
+    public void setAnObj(Anchorage an,Date date,int k,String name) throws Exception{
         if(k==1){
             //如果只连续一次就中断了，抛锚日期就和起锚日期是同一天
             //或者是今天刚抛锚还没起锚，抛锚日期等于记录日期的最后一天
@@ -178,11 +176,23 @@ public class ShipManageService {
     }
 
     //插入处理后的数据到数据库
-    public void insertAn(Anchorage an){
+    public void insertAn(Anchorage an) throws Exception{
         shipManageMapper.insertAnchorage(an);
-        System.out.println(an.toString());
     }
 
+    //插入原始到数据库
+    public void insertAnchorageSource(Map param) throws Exception{
+        shipManageMapper.insertAnchorageSource(param);
+    }
+
+    //插入原始到数据库
+    public void insertWharfsSource(Map param) throws Exception{
+        shipManageMapper.insertWharfsSource(param);
+    }
+    //插入原始到数据库
+    public void insertVesselsSource(Map param) throws Exception{
+        shipManageMapper.insertVesselsSource(param);
+    }
 
     public static int calcDayOffset(Date date1, Date date2) {
         Calendar cal1 = Calendar.getInstance();

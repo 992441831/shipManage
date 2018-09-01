@@ -22,4 +22,8 @@ public interface ShipManageMapper {
     public List<Date> queryEveryDate(String name);
     public void insertAnchorage(Anchorage an);
 
+    public void insertAnchorageSource(Map paramMap);
+    public void insertWharfsSource(Map paramMap);
+    public void insertVesselsSource(Map paramMap);
+
 }

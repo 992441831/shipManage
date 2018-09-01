@@ -33,20 +33,32 @@ function test1(){
 	});
 }
 
-//导出不好不要用ajax，用超链接
+
 function test3(){
 	$.ajax({
 		type: "get",
 		//dataType: "json",
-		url:"/shipManage/module/shipManage/dataExport.do",
+		url:"/shipManage/module/shipManage/insertVesselsSource.do",
 		data:{
-			dataStr:'2018-03-14',
-			pno:     1,
-			pageSize: 4
+			/*mao_date:'2018-03-14',
+			name:'和谐号',
+			target_port:'码头#2'*/
+			name:'复兴号',
+			telephone:'10086',
+			length:'123.88',
+			tonnage:222,
+			break_rules:"无"
 		},
 		success: function(result)
 		{
-			console.log("下载成功，请用超链接而显示弹窗");
+			console.log(result);
+			var status=result.status;
+			var res = $("#div");
+			if(status==0){
+				alert(result.msg);
+				res.append(JSON.stringify(result.newAddr));
+				res.append("<br>");
+			}
 		},
 		error: function(result) {
 			alert("发送请求失败:状态码" + result.status);
@@ -104,7 +116,7 @@ function test5(){
 <body>
 
 	<input type="button" onclick="test1();" value="按锚定日期查询船舶信息" id="testBtn1" style="margin-left:5px;"/><br/><br/>
-	<input type="button" onclick="test3();" value="导出数据" id="testBtn3" style="margin-left:5px;"/><br/><br/>
+	<input type="button" onclick="test3();" value="测试" id="testBtn3" style="margin-left:5px;"/><br/><br/>
 	<input type="button" onclick="test4();" value="刷新数据" id="testBtn4" style="margin-left:5px;"/><br/><br/>
 	<div id="div"></div>
 </body>

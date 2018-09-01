@@ -4,6 +4,7 @@ import com.ai.frame.export.ExportExcel;
 import com.ai.frame.export.Ship;
 import com.ai.frame.util.Config;
 import com.ai.frame.util.GetParamUtil;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Path;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -180,4 +182,185 @@ public class ShipManageController {
         return reusltMap;
     }
 
+    /*
+    * 插入原始数据
+    * @param request
+    * @param response
+    * @return
+    * @throws Exception
+    */
+    @RequestMapping(value = "/insertAnchorageSource.do",method = RequestMethod.GET)
+    @ResponseBody
+    public  Object insertAnchorageSource(HttpServletRequest request,
+                        HttpServletResponse response) throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
+        // 取查询条件
+        Map paramMap =  GetParamUtil.getRequestParamMap(request);
+        Map reusltMap = new HashMap();
+        Object mao_date = paramMap.get("mao_date");
+        Object name = paramMap.get("name");
+        if(mao_date==null||mao_date.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","mao_date不能为空");
+            return reusltMap;
+        }
+        if(name==null||name.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","name不能为空");
+            return reusltMap;
+        }
+        String[] strs = ((String)mao_date).split("-");
+        if(strs.length!=3){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","日期样式须为yyyy-mm-dd");
+            return reusltMap;
+        }
+        try{
+            shipManageService.insertAnchorageSource(paramMap);
+        } catch (DataIntegrityViolationException e) {
+            reusltMap.put("status",1);
+            reusltMap.put("msg","输入日期不对，请核查");
+            return reusltMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            reusltMap.put("status",1);
+            reusltMap.put("msg","插入失败");
+            return reusltMap;
+        }
+        reusltMap.put("status",0);
+        reusltMap.put("msg","插入成功");
+        return reusltMap;
+    }
+    /*
+       * 插入原始数据
+       * @param request
+       * @param response
+       * @return
+       * @throws Exception
+       */
+    @RequestMapping(value = "/insertWharfsSource.do",method = RequestMethod.GET)
+    @ResponseBody
+    public  Object insertWharfsSource(HttpServletRequest request,
+                                         HttpServletResponse response) throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
+        // 取查询条件
+        Map paramMap =  GetParamUtil.getRequestParamMap(request);
+        Map reusltMap = new HashMap();
+        Object mao_date = paramMap.get("mao_date");
+        Object name = paramMap.get("name");
+        Object target_port = paramMap.get("target_port");
+
+        if(mao_date==null||mao_date.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","mao_date不能为空");
+            return reusltMap;
+        }
+        if(name==null||name.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","name不能为空");
+            return reusltMap;
+        }
+        if(target_port==null||target_port.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","target_port不能为空");
+            return reusltMap;
+        }
+        String[] strs = ((String)mao_date).split("-");
+        if(strs.length!=3){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","日期样式须为yyyy-mm-dd");
+            return reusltMap;
+        }
+        try{
+            shipManageService.insertWharfsSource(paramMap);
+        } catch (DataIntegrityViolationException e) {
+            reusltMap.put("status",1);
+            reusltMap.put("msg","输入日期不对，请核查");
+            return reusltMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            reusltMap.put("status",1);
+            reusltMap.put("msg","插入失败");
+            return reusltMap;
+        }
+        reusltMap.put("status",0);
+        reusltMap.put("msg","插入成功");
+        return reusltMap;
+    }
+
+    /*
+      * 插入原始数据
+      * @param request
+      * @param response
+      * @return
+      * @throws Exception
+      */
+    @RequestMapping(value = "/insertVesselsSource.do",method = RequestMethod.GET)
+    @ResponseBody
+    public  Object insertVesselsSource(HttpServletRequest request,
+                                      HttpServletResponse response) throws Exception {
+        response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
+        // 取查询条件
+        Map paramMap =  GetParamUtil.getRequestParamMap(request);
+        Map reusltMap = new HashMap();
+        Object name = paramMap.get("name");
+        Object telephone = paramMap.get("telephone");
+        Object length = paramMap.get("length");
+        Object tonnage = paramMap.get("tonnage");
+        Object break_rules = paramMap.get("break_rules");
+
+        if(name==null||name.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","name不能为空");
+            return reusltMap;
+        }
+        if(telephone==null||telephone.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","telephone不能为空");
+            return reusltMap;
+        }
+
+        if(length==null||length.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","length不能为空");
+            return reusltMap;
+        }
+        if(tonnage==null||tonnage.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","tonnage不能为空");
+            return reusltMap;
+        }
+        if(break_rules==null||break_rules.equals("")){
+            reusltMap.put("status",1);
+            reusltMap.put("msg","break_rules不能为空");
+            return reusltMap;
+        }
+        try {
+            double l = Double.valueOf(length.toString());
+            double t = Double.valueOf(tonnage.toString());
+            paramMap.put("length",l);
+            paramMap.put("tonnage",t);
+        } catch (NumberFormatException e) {
+            reusltMap.put("status",1);
+            reusltMap.put("msg","船长和吨位须数字");
+            return reusltMap;
+        } catch (Exception e) {
+            e.printStackTrace();
+            reusltMap.put("status",1);
+            reusltMap.put("msg","程序异常，msg:"+e.getMessage());
+            return reusltMap;
+        }
+
+        try{
+            shipManageService.insertVesselsSource(paramMap);
+        } catch (Exception e) {
+            e.printStackTrace();
+            reusltMap.put("status",1);
+            reusltMap.put("msg","插入失败");
+            return reusltMap;
+        }
+        reusltMap.put("status",0);
+        reusltMap.put("msg","插入成功");
+        return reusltMap;
+    }
 }
