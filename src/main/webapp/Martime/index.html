@@ -6,31 +6,114 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>船舶监管系统</title>
     <link rel="stylesheet" href="css/bootstrap.css">
-    <script src="js/jquery-1.11.3.js"></script>
+    <link rel="stylesheet" href="css/jquery.datetimepicker.css">
+    <script src="js/jquery.js"></script>
     <script src="js/bootstrap.js"></script>
-    <script src="js/vue.js"></script>
+    <script src="js/jquery.datetimepicker.js"></script>
+    <style>
+        .data-padding{
+            padding:0;
+        }
+        .data-add{
+            text-align: center;
+            vertical-align: middle;
+            height:34px;
+            line-height: 34px;
+            font-size:14px;
+            font-weight: bolder;
+        }
+
+        /*数据添加 anchorage,wharfs,vessel*/
+        .anchorage-jumbotron,.wharfs-jumbotron,.vessel-jumbotron{
+            /*left: 50%;
+            top: 50%;*/
+            width:323px;
+            /*height:320px;*/
+            border-radius: 15px;
+            position: fixed;
+            z-index: 999;
+            background: #fff;
+            border:2px solid #ddd;
+            opacity: 1;
+            display: none;
+        }
+        .anchorage-jumbotron h1,.wharfs-jumbotron h1,.vessel-jumbotron h1{
+            font-size:18px;
+            margin-top:0px;
+            text-align: center;
+            background: #337ab7;
+            line-height: 30px;
+            color:#fff;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .anchorage-jumbotron ul,.wharfs-jumbotron ul,.vessel-jumbotron ul{
+            list-style: none;
+        }
+        .anchorage-jumbotron ul li,.wharfs-jumbotron ul li,.vessel-jumbotron ul li{
+            margin-top:15px;
+        }
+
+        .anchorage-jumbotron ul li input,.wharfs-jumbotron ul li input,.vessel-jumbotron ul li input{
+            display: inline;
+            line-height: 18px;
+            font-size:14px;
+        }
+        .txt-btn{
+            text-align: center;
+        }
+        .vessel-jumbotron{
+            left: 35%;
+            top: 20%;
+            height: 320px;
+        }
+        .wharfs-jumbotron{
+            left: 35%;
+            top: 20%;
+            height: 250px;
+        }
+        .anchorage-jumbotron{
+            left: 35%;
+            top: 20%;
+            height: 200px;
+        }
+    </style>
 </head>
 <body>
 <div id="app">
 <div class="page-header">
     <h3 class="text-center" style="color:#337ab7;">江阴海事局黄田港海事处船舶监管系统</h3>
 </div>
-    <div class="container">
+
+   <div class="container">
         <div class="row">
-            <div class="col-xs-4">
-                <div class="form-group col-xs-6">
-                <select class="form-control">
-                    <option value="">--请选择--</option>
-                    <option value="week">7天内</option>
-                    <option value="month">30天内</option>
-                </select>
+            <div class="col-xs-5">
+                <div class="col-xs-8">
+                    <span class="col-xs-4 data-padding data-add">选择日期:</span>
+                    <div class="col-xs-8 pull-right data-padding">
+                        <input id="begintime" class="datetimepicker" placeholder="" type="text" style="width:125px;height:30px;margin:2px 0;padding:7px 10px;border:1px solid #ccc;" >
+                        <a class="btn btn-default" id="query">查询</a>
+                    </div>
                 </div>
                 <a class="btn btn-default" id="show">全部显示</a>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-1">
                 <a class="btn btn-primary" id="ship_list_update">刷新</a>
             </div>
             <div class="col-xs-3">
+                <div class="form-group">
+                    <span class="col-xs-4 data-padding data-add">添加数据:</span>
+                    <div class="col-xs-8 pull-right data-padding">
+                        <select class="form-control" id="myselect">
+                            <option value="0">--请选择数据表--</option>
+                            <option value="1">anchorage</option>
+                            <option value="2">vessels</option>
+                            <option value="3">wharfs</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-2">
                 <div class="form-group has-feedback">
                     <label for="ship-kw" class="sr-only">搜索船名：</label>
                     <input class="form-control" type="text" id="ship-kw" placeholder="请输入船名">
@@ -41,6 +124,69 @@
                 <a class="btn btn-primary pull-right" href="#" id="export">导出</a>
             </div>
         </div>
+       <!--添加数据的弹框start-->
+<!--添加vessel数据-->
+       <div class="vessel-jumbotron">
+           <h1>船舶信息</h1>
+           <ul>
+               <li>
+                   船名：<input type="text">
+               </li>
+               <li>
+                   电话：<input type="text">
+               </li>
+               <li>
+                   船长：<input type="text">
+               </li>
+               <li>
+                   吨位：<input type="text">
+               </li>
+               <li>
+                   违章情况：<input type="text">
+               </li>
+               <li class="txt-btn">
+                   <a class="btn btn-primary btn-xs" id="vessel-add" href="#" role="button">添加</a>
+                   <a class="btn btn-primary btn-xs" id="vessel-close" href="#" role="button">关闭</a>
+               </li>
+           </ul>
+       </div>
+<!--添加wharfs数据-->
+       <div class="wharfs-jumbotron">
+           <h1>船舶信息</h1>
+           <ul>
+               <li>
+                   日期：<input type="text">
+               </li>
+               <li>
+                   船名：<input type="text">
+               </li>
+               <li>
+                   目的港：<input type="text">
+               </li>
+               <li class="txt-btn">
+                   <a class="btn btn-primary btn-xs" id="wharfs-add" href="#" role="button">添加</a>
+                   <a class="btn btn-primary btn-xs" id="wharfs-close" href="#" role="button">关闭</a>
+               </li>
+           </ul>
+       </div>
+<!--添加anchorage数据-->
+       <div class="anchorage-jumbotron">
+           <h1>船舶信息</h1>
+           <ul>
+               <li>
+                   日期：<input type="text">
+               </li>
+               <li>
+                   船名：<input type="text">
+               </li>
+               <li class="txt-btn">
+                   <a class="btn btn-primary btn-xs" id="anchorage-add" href="#" role="button">添加</a>
+                   <a class="btn btn-primary btn-xs" id="anchorage-close" href="#" role="button">关闭</a>
+               </li>
+           </ul>
+       </div>
+
+       <!--添加数据的弹框end-->
 <!--表格-->
         <div class="row">
             <div class="col-xs-12">
@@ -49,7 +195,6 @@
                         <thead>
                         <tr>
                             <th>编号</th>
-                            <th>日期</th>
                             <th>船名</th>
                             <th>船长</th>
                             <th>吨位</th>
@@ -57,6 +202,7 @@
                             <th>目的港</th>
                             <th>起锚日期</th>
                             <th>锚泊天数</th>
+                             <th>进港日期</th>
                             <th>电话</th>
                             <th>其它</th>
                         </tr>
@@ -87,9 +233,37 @@ var pno;
 var pageSize=8;
 var name;
 var pattern;
-//默认调用第一页
-loadShipByPage(1,pageSize);
+var dataStr;
+//获取当前时间，格式YYYY-MM-DD
+function getNowFormatDate() {
+    var date = new Date();
+    var seperator1 = "-";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+        month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+        strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    return currentdate;
+}
+//日历日期选择
+$('.datetimepicker').datetimepicker({lang:'ch',format:'Y-m-d',formatDate:'Y-m-d',timepicker: false});
+//获取当前日期
+dataStr=getNowFormatDate();
 
+//默认调用第一页
+loadShipByPage(1,pageSize,dataStr);
+
+//获取日期输入input绑定事件    11:40--11:45
+$("#query").on('click',function(){
+    //获取input中的dataStr值
+    var date = $("#begintime").val();
+    loadShipByPage(pno,pageSize,date);
+});
 
 //点击按钮刷新页面
 $("#ship_list_update").click(function(){
@@ -128,12 +302,13 @@ $("#pagination").on("click","li a",function(e){
 $("#show").click(function(){
 	loadShipByPage(pno,pageSize);
 });
-
+console.log()
 //导出
 $("#export").on("click",function(){
 	  $(this).attr("href","/shipManage/module/shipManage/dataExport.do?pno="+pno+"&pageSize="+pageSize+"");
-})
-  
+});
+
+
 </script>
 </body>
 </html>

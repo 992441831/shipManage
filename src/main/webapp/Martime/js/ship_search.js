@@ -23,18 +23,18 @@ function searchShipByName(pno,pageSize,name){
              for(var i=0;i<rows.length;i++) {//循环拼接
                  var obj = rows[i];
                  html += `
-                   <tr>
-                                 <td>${obj.id}</td>
-                                 <td>${obj.create_date}</td>
-                                 <td>${obj.name}</td>
-                                 <td>${obj.length}</td>
-                                 <td>${obj.tonnage}</td>
-                                 <td>${obj.anchor_date}</td>
-                                 <td>${obj.target_port}</td>
-                                 <td>${obj.weigh_date}</td>
-                                 <td>${obj.anchor_days}</td>
-                                 <td>${obj.telephone}</td>
-                                 <td>${obj.break_rules}</td>
+                   <tr>      
+                            <td>${obj.id}</td>
+                            <td>${obj.name}</td>
+                            <td>${obj.length}</td>
+                            <td>${obj.tonnage}</td>
+                            <td>${obj.anchor_date}</td>
+                            <td>${obj.target_port}</td>
+                            <td>${obj.weigh_date}</td>
+                            <td>${obj.anchor_days}</td>
+                            <td>${obj.access_port_date}</td>
+                            <td>${obj.telephone}</td>
+                            <td>${obj.break_rules}</td>
                              </tr>`;
              }//for end
            
