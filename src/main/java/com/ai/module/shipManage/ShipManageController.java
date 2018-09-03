@@ -43,27 +43,20 @@ public class ShipManageController {
         Map paramMap =  GetParamUtil.getRequestParamMap(request);
         Map reusltMap = new HashMap();
         Object dataStr = paramMap.get("dataStr");
-        Object name = paramMap.get("name");
-       /* if(name==null){
-            if(dataStr==null||dataStr.equals("")){
-                reusltMap.put("status",1);
-                reusltMap.put("msg","dataStr不能为空");
-                return reusltMap;
-            }
+
+        if(dataStr!=null){
             String[] strs = ((String)dataStr).split("-");
             if(strs.length!=3){
                 reusltMap.put("status",1);
                 reusltMap.put("msg","日期样式须为yyyy-mm-dd");
                 return reusltMap;
             }
-        }*/
+        }
+
+
         List<Ship> list =null;
         try{
             list = shipManageService.queryShip(paramMap);
-        } catch (DataIntegrityViolationException e) {
-            reusltMap.put("status",1);
-            reusltMap.put("msg","输入日期不对，请核查");
-            return reusltMap;
         } catch (Exception e) {
             e.printStackTrace();
             reusltMap.put("status", 1);
