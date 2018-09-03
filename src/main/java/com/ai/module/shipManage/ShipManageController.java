@@ -77,7 +77,7 @@ public class ShipManageController {
      */
     @RequestMapping(value = "/dataExport.do",method = RequestMethod.GET)
     //@ResponseBody
-    public Object dataExport(HttpServletRequest request,
+    public void dataExport(HttpServletRequest request,
                                    HttpServletResponse response) throws Exception {
         response.setHeader("Access-Control-Allow-Origin", "*");//允许其它链接跨域访问
         Config conf = Config.getInstance();
@@ -111,14 +111,14 @@ public class ShipManageController {
         } catch (DataIntegrityViolationException e) {
             reusltMap.put("status",1);
             reusltMap.put("msg","输入日期不对，请核查");
-            return reusltMap;
+            //return reusltMap;
         } catch (Exception e) {
             e.printStackTrace();
             reusltMap.put("status", 1);
             reusltMap.put("msg", "程序异常:查询失败error:"+e.getMessage());
-            return reusltMap;
+            //return reusltMap;
         }
-        return reusltMap;
+        //return reusltMap;
     }
 
     //弹窗下载
