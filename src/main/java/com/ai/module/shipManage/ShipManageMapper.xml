@@ -23,7 +23,7 @@
 			and DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.anchor_date)&gt;=0
 			and  DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.weigh_date)&lt;=0
 		</if>
-		<if test="dataStr==null">
+		<if test="dataStr==null and name==null">
 			and DATEDIFF(NOW(),sm.anchor_date)&gt;=0 and  DATEDIFF(NOW(),sm.weigh_date)&lt;=0
 		</if>
 		<if test="name!=null">
