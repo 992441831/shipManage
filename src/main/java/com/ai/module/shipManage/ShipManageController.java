@@ -44,7 +44,7 @@ public class ShipManageController {
         Map reusltMap = new HashMap();
         Object dataStr = paramMap.get("dataStr");
         Object name = paramMap.get("name");
-        if(name==null){
+       /* if(name==null){
             if(dataStr==null||dataStr.equals("")){
                 reusltMap.put("status",1);
                 reusltMap.put("msg","dataStr不能为空");
@@ -56,7 +56,7 @@ public class ShipManageController {
                 reusltMap.put("msg","日期样式须为yyyy-mm-dd");
                 return reusltMap;
             }
-        }
+        }*/
         List<Ship> list =null;
         try{
             list = shipManageService.queryShip(paramMap);
