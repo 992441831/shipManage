@@ -15,7 +15,11 @@ function searchShipByName(pno,pageSize,name){
         url:"/shipManage/module/shipManage/queryShip.do",
         data:{pno:pno,pageSize:pageSize,name:name},
         success:function(data){
-            //console.log(data);
+            /*console.log(data);
+        	var status=data.status;
+			if(status==0){
+				alert(data.msg);
+			}*/
             //6:获取返回数据  9:50--9:53
             //7:拼接当前页内容
         	 var rows = data.list;

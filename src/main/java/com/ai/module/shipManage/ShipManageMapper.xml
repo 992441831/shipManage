@@ -17,7 +17,10 @@
 				weigh_date,
 				anchor_days,
 				telephone,
-				break_rules
+				break_rules,
+				width,
+				tonnage_net,
+				tonnage_load
 		from shipmanage sm  where  1=1
 		<if test="dataStr!=null">
 			and DATEDIFF(DATE_FORMAT(#{dataStr}, '%Y-%m-%d'),sm.anchor_date)&gt;=0
@@ -79,13 +82,16 @@
     <!--用于数据库刷新数据,从三张表中获取数据，并加上业务逻辑后插入到 终表中-->
     <insert id="refreshData">
 	insert into shipmanage
-						(access_port_date,name,length,tonnage,anchor_date,target_port,weigh_date,anchor_days,telephone,break_rules,nameAndDate)
+						(access_port_date,name,length,width,tonnage,tonnage_net,tonnage_load,anchor_date,target_port,weigh_date,anchor_days,telephone,break_rules,nameAndDate)
 			select
 							(CASE WHEN t.mao_date is NULL THEN '1900-1-1'  ELSE t.mao_date  END) mao_date1,
 							t.name,
 							-- length,tonnage,paomao_date,-- qimao_date,mao_days,telephone,break_rules
 							(CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END) length1,
+							(CASE WHEN ts.width is NULL THEN 0.0  ELSE ts.width  END) width1,
 							(CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) tonnage1,
+							(CASE WHEN ts.tonnage_net is NULL THEN 0.0  ELSE ts.tonnage_net  END) tonnage_net1,
+							(CASE WHEN ts.tonnage_load is NULL THEN 0.0  ELSE ts.tonnage_load  END) tonnage_load1,
 							(CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END) paomao_date1,
 							(CASE WHEN t.target_port is NULL THEN '-'  ELSE t.target_port  END) target_port1,
 							(CASE WHEN t.qimao_date is NULL THEN '1900-1-1'  ELSE t.qimao_date  END) qimao_date1,
@@ -107,7 +113,10 @@
 ON DUPLICATE KEY UPDATE
 			access_port_date = (CASE WHEN t.mao_date is NULL THEN '1900-1-1'  ELSE t.mao_date  END),
 			length = (CASE WHEN ts.length is NULL THEN 0.0  ELSE ts.length  END),
+			width = (CASE WHEN ts.width is NULL THEN 0.0  ELSE ts.width  END),
 			tonnage = (CASE WHEN ts.tonnage is NULL THEN 0.0  ELSE ts.tonnage  END) ,
+			tonnage_net = (CASE WHEN ts.tonnage_net is NULL THEN 0.0  ELSE ts.tonnage_net  END) ,
+			tonnage_load = (CASE WHEN ts.tonnage_load is NULL THEN 0.0  ELSE ts.tonnage_load  END) ,
 			telephone = (CASE WHEN ts.telephone is NULL THEN '-'  ELSE ts.telephone  END),
 			break_rules = (CASE WHEN ts.break_rules is NULL THEN '-'  ELSE ts.break_rules  END),
 			anchor_date = (CASE WHEN t.paomao_date is NULL THEN '1900-1-1'  ELSE t.paomao_date  END),
@@ -116,17 +125,17 @@ ON DUPLICATE KEY UPDATE
 			anchor_days =(CASE WHEN t.mao_days is NULL THEN 0  ELSE t.mao_days  END)
     </insert>
 
-	<!--插入到锚定日期原始表：tab_anchorage_res-->
+	<!--插入到锚定日期原始表：tab_anchorage_res（锚定）-->
 	<insert id="insertAnchorageSource" parameterType="java.util.HashMap">
 		INSERT into tab_anchorage_res (mao_date,name) values(#{mao_date},#{name})
 	</insert>
-	<!--插入到锚定日期原始表：tab_wharfs-->
+	<!--插入到锚定日期原始表：tab_wharfs（码头）-->
 	<insert id="insertWharfsSource" parameterType="java.util.HashMap">
 		INSERT into tab_wharfs (mao_date,name,target_port) values(#{mao_date},#{name},#{target_port})
 	</insert>
-	<!--插入到锚定日期原始表：tab_vessels-->
+	<!--插入到锚定日期原始表：tab_vessels(船舶基本信息)-->
 	<insert id="insertVesselsSource" parameterType="java.util.HashMap">
-		INSERT into tab_vessels (name,telephone,length,tonnage,break_rules) values(#{name},#{telephone},#{length},#{tonnage},#{break_rules})
+		INSERT into tab_vessels (name,telephone,length,tonnage,break_rules,width,tonnage_net,tonnage_load) values(#{name},#{telephone},#{length},#{tonnage},#{break_rules},#{width},#{tonnage_net},#{tonnage_load})
 	</insert>
 
 </mapper>

@@ -90,18 +90,17 @@
 
    <div class="container">
         <div class="row">
-            <div class="col-xs-5 form-inline">
-                <div class="col-xs-8 form-group">
-                    <span class="data-padding data-add">选择日期：</span>
-                    <input  id="begintime" class="datetimepicker form-control" placeholder="" type="text" style="width:125px;height:30px;margin:2px 0;padding:7px 10px;border:1px solid #ccc;" >
+            <div class="col-xs-3 form-inline">
+                <div class="form-group">
+                    <span class="data-padding data-add">日期：</span>
+                    <input  id="begintime" class="datetimepicker form-control" placeholder="请选择日期" type="text" style="width:125px;height:30px;margin:2px 0;padding:7px 10px;border:1px solid #ccc;" >
                     <a class="btn btn-default" id="query">查询</a>
                 </div>
-                <a class="btn btn-default" id="show">全部显示</a>
             </div>
             <div class="col-xs-1">
                 <a class="btn btn-primary" id="ship_list_update">刷新</a>
             </div>
-            <div class="form-inline col-xs-3">
+            <div class="form-inline col-xs-4">
                 <div class="form-group">
                     <span class="data-padding data-add">添加数据：</span>
                     <div class="pull-right data-padding">
@@ -114,12 +113,15 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xs-2">
+            <div class="col-xs-3">
+               <div class="col-xs-9">
                 <div class="form-group has-feedback">
                     <label for="ship-kw" class="sr-only">搜索船名：</label>
                     <input class="form-control" type="text" id="ship-kw" placeholder="请输入船名">
                     <span class="glyphicon glyphicon-search form-control-feedback"></span>
                 </div>
+               </div>
+               <a class="btn btn-default" id="show">返回</a>
             </div>
             <div class="col-xs-1">
                 <a class="btn btn-primary pull-right" href="#" id="export">导出</a>
@@ -245,7 +247,6 @@
 <script src="js/ship_list.js"></script>
 <script src="js/ship_search.js"></script>
 <script src="js/data_refresh.js"></script>
-<script src="js/ship_add.js"></script>
 <script>
     var pno;
     var pageSize=8;
@@ -274,6 +275,7 @@
     dataStr=getNowFormatDate();
 
     //默认调用第一页
+   /*  shipDataRefresh(); */
     loadShipByPage(1,pageSize,dataStr);
 
     //获取日期输入input绑定事件    11:40--11:45
@@ -297,7 +299,6 @@
         //3:如果当前用户输入 enter
         if(e.keyCode==13) {
             //4:调用
-            //console.log(name);
             searchShipByName(pno,pageSize,name);
         }
     });
@@ -316,18 +317,20 @@
         }
     });
 
-
-    //全部显示
+    //返回
     $("#show").click(function(){
         loadShipByPage(pno,pageSize,dataStr);
     });
 
-    //导出
+  //导出
+
     $("#export").on("click",function(){
-        $(this).attr("href","/shipManage/module/shipManage/dataExport.do?pno="+pno+"&pageSize="+pageSize+"");
+    	dataStr = $("#begintime").val();
+    	  console.log(dataStr);
+        $(this).attr("href","/shipManage/module/shipManage/dataExport.do?dataStr="+dataStr+"&pageSize="+pageSize+"");
     });
 
-
 </script>
+<script src="js/ship_add.js"></script>
 </body>
 </html>

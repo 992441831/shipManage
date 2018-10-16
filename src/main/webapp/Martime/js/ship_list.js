@@ -15,12 +15,9 @@ function loadShipByPage(pno1,pageSize1,dataStr1){
         data:{dataStr:dataStr,pno:pno,pageSize:pageSize},
         success:function(data){
             //*3:动态创建表格中多行 id="tbody1"
-            //console.log(data.list.length);
+            console.log(data);
             var rows = data.list;
             var html = "";                 //声明空字符串
-            if(rows.length==0){
-                html="";
-            }else{
                 for(var i=0;i<rows.length;i++) {//循环拼接
                     var obj = rows[i];
                     if(obj.access_port_date=='1900-01-01'){
@@ -51,30 +48,30 @@ function loadShipByPage(pno1,pageSize1,dataStr1){
                             </tr>`;
                 }//for end
                 $("#tbody1").html(html);       //保存tbody
-            }
+                
+              //5:动态创建分页条 1 2 【3】 4 5 最多5页
+                var html = "";
+                //上上一页
 
-            //5:动态创建分页条 1 2 【3】 4 5 最多5页
-            var html = "";
-            //上上一页
-
-            if(pno-2>0){
-                html += '<li><a href="#">'+(pno-2)+'</a></li>';
-            }
-            //上一页 10:53--11:03
-            if(pno-1>0){
-                html += '<li><a href="#">'+(pno-1)+'</a></li>';
-            }
-            //当前页
-            html += '<li class="active"><a href="#">'+pno+'</a></li>';
-            //下一页
-            if(pno+1<=data.pageCount){
-                html += '<li><a href="#">'+(pno+1)+'</a></li>';
-            }
-            //下下一页
-            if(pno+2<=data.pageCount){
-                html += '<li><a href="#">'+(pno+2)+'</a></li>';
-            }
-            $("#pagination").html(html);
+                if(pno-2>0){
+                    html += '<li><a href="#">'+(pno-2)+'</a></li>';
+                }
+                //上一页 10:53--11:03
+                if(pno-1>0){
+                    html += '<li><a href="#">'+(pno-1)+'</a></li>';
+                }
+                //当前页
+                html += '<li class="active"><a href="#">'+pno+'</a></li>';
+                //下一页
+                if(pno+1<=data.pageCount){
+                    html += '<li><a href="#">'+(pno+1)+'</a></li>';
+                }
+                //下下一页
+                if(pno+2<=data.pageCount){
+                    html += '<li><a href="#">'+(pno+2)+'</a></li>';
+                }
+                $("#pagination").html(html);
+            
         },
         error:function(){
             alert("网络故障请检查！");

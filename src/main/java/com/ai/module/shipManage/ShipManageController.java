@@ -326,6 +326,9 @@ public class ShipManageController {
         Object length = paramMap.get("length");
         Object tonnage = paramMap.get("tonnage");
         Object break_rules = paramMap.get("break_rules");
+        Object width = paramMap.get("width");
+        Object tonnage_net = paramMap.get("tonnage_net");
+        Object tonnage_load = paramMap.get("tonnage_load");
 
         if(name==null||name.equals("")){
             reusltMap.put("status",1);
