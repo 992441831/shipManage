@@ -10,7 +10,10 @@ public class Ship {
     Date access_port_date;
     String name;
     Double length;
+    Double width;
     Double tonnage;
+    Double tonnage_net;
+    Double tonnage_load;
     Date  anchor_date;
     String target_port;
     Date   weigh_date;
@@ -19,12 +22,16 @@ public class Ship {
     String break_rules;
     //String nameAndDate;
 
-    public Ship(int id, Date access_port_date, String name, Double length, Double tonnage, Date anchor_date, String target_port, Date weigh_date, int anchor_days, String telephone, String break_rules) {
+
+    public Ship(int id, String name, Date access_port_date, Double length, Double width, Double tonnage, Double tonnage_net, Double tonnage_load, Date anchor_date, String target_port, Date weigh_date, int anchor_days, String telephone, String break_rules) {
         this.id = id;
-        this.access_port_date = access_port_date;
         this.name = name;
+        this.access_port_date = access_port_date;
         this.length = length;
+        this.width = width;
         this.tonnage = tonnage;
+        this.tonnage_net = tonnage_net;
+        this.tonnage_load = tonnage_load;
         this.anchor_date = anchor_date;
         this.target_port = target_port;
         this.weigh_date = weigh_date;
@@ -124,6 +131,30 @@ public class Ship {
         this.break_rules = break_rules;
     }
 
+    public Double getWidth() {
+        return width;
+    }
+
+    public void setWidth(Double width) {
+        this.width = width;
+    }
+
+    public Double getTonnage_net() {
+        return tonnage_net;
+    }
+
+    public void setTonnage_net(Double tonnage_net) {
+        this.tonnage_net = tonnage_net;
+    }
+
+    public Double getTonnage_load() {
+        return tonnage_load;
+    }
+
+    public void setTonnage_load(Double tonnage_load) {
+        this.tonnage_load = tonnage_load;
+    }
+
     @Override
     public String toString() {
         return "Ship{" +
@@ -131,7 +162,10 @@ public class Ship {
                 ", access_port_date=" + access_port_date +
                 ", name='" + name + '\'' +
                 ", length=" + length +
+                ", width=" + width +
                 ", tonnage=" + tonnage +
+                ", tonnage_net=" + tonnage_net +
+                ", tonnage_load=" + tonnage_load +
                 ", anchor_date=" + anchor_date +
                 ", target_port='" + target_port + '\'' +
                 ", weigh_date=" + weigh_date +
