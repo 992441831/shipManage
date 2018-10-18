@@ -50,10 +50,10 @@
             border-top-left-radius: 15px;
             border-top-right-radius: 15px;
         }
-        .anchorage-jumbotron ul,.wharfs-jumbotron ul,.vessel-jumbotron ul{
+       .vessel-jumbotron ul{
             list-style: none;
         }
-        .anchorage-jumbotron ul li,.wharfs-jumbotron ul li,.vessel-jumbotron ul li{
+        .vessel-jumbotron ul li{
             margin-top:15px;
         }
 
@@ -68,9 +68,9 @@
         .vessel-jumbotron{
             left: 35%;
             top: 20%;
-            height: 320px;
+            height: 430px;
         }
-        .wharfs-jumbotron{
+        /* .wharfs-jumbotron{
             left: 35%;
             top: 20%;
             height: 250px;
@@ -79,7 +79,7 @@
             left: 35%;
             top: 20%;
             height: 200px;
-        }
+        } */
     </style>
 </head>
 <body>
@@ -98,18 +98,19 @@
                 </div>
             </div>
             <div class="col-xs-1">
-                <a class="btn btn-primary" id="ship_list_update">刷新</a>
+                <a class="btn btn-primary" id="ship_list_update">后台刷新</a>
             </div>
             <div class="form-inline col-xs-4">
                 <div class="form-group">
                     <span class="data-padding data-add">添加数据：</span>
                     <div class="pull-right data-padding">
-                        <select class="form-control" id="myselect">
-                            <option value="0">--请选择数据表--</option>
-                            <option value="1">anchorage</option>
-                            <option value="2">vessels</option>
-                            <option value="3">wharfs</option>
-                        </select>
+                        <input type="button" id="myselect" value="录入船舶基本信息">
+                        <!--<select class="form-control" id="myselect">
+                            <option value="0">&#45;&#45;请选择数据表&#45;&#45;</option>
+                            &lt;!&ndash; <option value="1">anchorage</option> &ndash;&gt;
+                            <option value="2">录入船舶基本信息</option>
+                            &lt;!&ndash; <option value="3">wharfs</option> &ndash;&gt;
+                        </select>-->
                     </div>
                 </div>
             </div>
@@ -130,7 +131,7 @@
        <!--添加数据的弹框start-->
 <!--添加vessel数据-->
        <div class="vessel-jumbotron">
-           <h1>船舶信息</h1>
+           <h1>船舶基本信息</h1>
            <form id="form-vessel">
                <div class="col-xs-offset-1 form-inline">
                    <div class="form-group has-feedback data-margin">
@@ -146,8 +147,20 @@
                        <input class="form-control" type="text" value="" name="length" placeholder="请输入船长">
                    </div>
                    <div class="form-group has-feedback data-margin">
-                       <span class="data-padding data-add">吨位：</span>
-                       <input class="form-control" value="" type="text" name="tonnage" placeholder="请输入吨位">
+                       <span class="data-padding data-add">船宽：</span>
+                       <input class="form-control" type="text" value="" name="width" placeholder="请输入船宽">
+                   </div>
+                   <div class="form-group has-feedback data-margin">
+                       <span class="data-padding data-add">总吨：</span>
+                       <input class="form-control" value="" type="text" name="tonnage" placeholder="请输入总吨位">
+                   </div>
+                   <div class="form-group has-feedback data-margin">
+                       <span class="data-padding data-add">净吨：</span>
+                       <input class="form-control" value="" type="text" name="tonnage_net" placeholder="请输入净吨位">
+                   </div>
+                   <div class="form-group has-feedback data-margin">
+                       <span class="data-padding data-add">载重吨：</span>
+                       <input class="form-control" value="" type="text" name="tonnage_load" placeholder="请输入载重吨位">
                    </div>
                    <div class="form-group has-feedback data-margin">
                        <span class="data-padding data-add">违章情况：</span>
@@ -161,8 +174,8 @@
            </form>
        </div>
 <!--添加wharfs数据-->
-       <div class="wharfs-jumbotron">
-           <h1>船舶信息</h1>
+       <!-- <div class="wharfs-jumbotron">
+           <h1>码头信息</h1>
            <form id="form-wharfs">
                <div class="col-xs-offset-1 form-inline">
                    <div class="form-group has-feedback data-margin">
@@ -183,10 +196,10 @@
                    </div>
                </div>
            </form>
-       </div>
+       </div> -->
 <!--添加anchorage数据-->
-       <div class="anchorage-jumbotron">
-           <h1>船舶信息</h1>
+       <!-- <div class="anchorage-jumbotron">
+           <h1>锚定日期信息</h1>
            <form id="form-anchorage">
                <div class="col-xs-offset-1 form-inline">
                    <div class="form-group has-feedback data-margin">
@@ -203,7 +216,7 @@
                    </div>
                </div>
            </form>
-       </div>
+       </div> -->
 
        <!--添加数据的弹框end-->
 <!--表格-->
@@ -216,14 +229,17 @@
                             <th>编号</th>
                             <th>船名</th>
                             <th>船长</th>
-                            <th>吨位</th>
+                            <th>船宽</th>
+                            <th>总吨</th>
+                            <th>净吨</th>
+                            <th>载重吨</th>
                             <th>抛锚日期</th>
                             <th>目的港</th>
                             <th>起锚日期</th>
                             <th>锚泊天数</th>
                              <th>进港日期</th>
                             <th>电话</th>
-                            <th>其它</th>
+                            <th>违章记录</th>
                         </tr>
                         </thead>
                         <tbody id="tbody1">
@@ -273,6 +289,7 @@
     $('.datetimepicker').datetimepicker({lang:'ch',format:'Y-m-d',formatDate:'Y-m-d',timepicker: false});
     //获取当前日期
     dataStr=getNowFormatDate();
+    $("#begintime").val(dataStr);
 
     //默认调用第一页
    /*  shipDataRefresh(); */
@@ -290,7 +307,6 @@
         shipDataRefresh();
         //console.log(dataStr);
         loadShipByPage(pno,pageSize,dataStr);
-
     });
     //1:获取上限输入input绑定事件 keyup   11:40--11:45
     $("#ship-kw").keyup(function(e){

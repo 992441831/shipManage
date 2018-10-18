@@ -85,7 +85,7 @@ public class ShipManageController {
         Map reusltMap = new HashMap();
         ExportExcel<Ship> exp = new ExportExcel<Ship>();
         String[] headers =
-                { "id", "进港日期", "船舶名称", "船舶长度", "吨位","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况"};
+                { "id", "进港日期", "船舶名称", "船舶长度","船宽", "总吨位","净吨","载重吨","抛锚日期","目标港口","起锚日期","停泊天数","电话","违章情况"};
         List<Ship> dataset = new ArrayList<Ship>();
         String fileName = "shipMessage.xls";
         String fileDir = conf.getProperty("fileDir");

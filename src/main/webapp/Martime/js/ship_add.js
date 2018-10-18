@@ -2,6 +2,7 @@ $(function(){
     //添加anchorage数据
    $("#anchorage-add").click(function(){
     var data = $("#form-anchorage").serialize();
+	   console.log(data);
     $.ajax({
 		type: "get",
 		//dataType: "json",
@@ -16,6 +17,8 @@ $(function(){
 				alert(result.msg);
 				res.append(JSON.stringify(result.newAddr));
 				res.append("<br>");
+			}else{
+				alert(result.msg);
 			}
 		},
 		error: function(result) {
@@ -27,7 +30,8 @@ $(function(){
    //添加vessel数据
     $("#vessel-add").click(function(){
         var data = $("#form-vessel").serialize();
-        $.ajax({
+		console.log(data);
+		$.ajax({
     		type: "get",
     		//dataType: "json",
     		url:"/shipManage/module/shipManage/insertVesselsSource.do",
@@ -41,7 +45,9 @@ $(function(){
     				alert(result.msg);
     				res.append(JSON.stringify(result.newAddr));
     				res.append("<br>");
-    			}
+    			}else{
+					alert(result.msg);
+				}
     		},
     		error: function(result) {
     			alert("发送请求失败:状态码" + result.status);
@@ -52,7 +58,8 @@ $(function(){
     //添加wharfs数据
     $("#wharfs-add").click(function(){
         var data = $("#form-wharfs").serialize();
-        $.ajax({
+		console.log(data);
+		$.ajax({
     		type: "get",
     		//dataType: "json",
     		url:"/shipManage/module/shipManage/insertWharfsSource.do",
@@ -66,7 +73,9 @@ $(function(){
     				alert(result.msg);
     				res.append(JSON.stringify(result.newAddr));
     				res.append("<br>");
-    			}
+    			}else{
+					alert(result.msg);
+				}
     		},
     		error: function(result) {
     			alert("发送请求失败:状态码" + result.status);
@@ -74,4 +83,26 @@ $(function(){
     	});
         $("#form-wharfs input").val("");
     })
+
+	//获取当前时间，格式YYYY-MM-DD
+	var dateStr;
+	function getNowFormatDate() {
+		var date = new Date();
+		var seperator1 = "-";
+		var year = date.getFullYear();
+		var month = date.getMonth() + 1;
+		var strDate = date.getDate();
+		if (month >= 1 && month <= 9) {
+			month = "0" + month;
+		}
+		if (strDate >= 0 && strDate <= 9) {
+			strDate = "0" + strDate;
+		}
+		var currentdate = year + seperator1 + month + seperator1 + strDate;
+		return currentdate;
+	}
+	dateStr = getNowFormatDate();
+	console.log(dateStr);
+	$("#wharfs_date").val(dateStr);
+	$("#anchorage_date").val(dateStr);
 })

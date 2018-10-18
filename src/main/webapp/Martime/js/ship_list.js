@@ -21,23 +21,35 @@ function loadShipByPage(pno1,pageSize1,dataStr1){
                 for(var i=0;i<rows.length;i++) {//循环拼接
                     var obj = rows[i];
                     if(obj.access_port_date=='1900-01-01'){
-                        obj.access_port_date='-';
+                        obj.access_port_date='无';
                     }
                     if(obj.length==0){
-                        obj.length='-';
+                        obj.length='无';
+                    }
+                    if(obj.width==0){
+                        obj.width='无';
                     }
                     if(obj.tonnage==0){
-                        obj.tonnage='-';
+                        obj.tonnage='无';
+                    }
+                    if(obj.tonnage_net==0){
+                        obj.tonnage_net='无';
+                    }
+                    if(obj.tonnage_load==0){
+                        obj.tonnage_load='无';
                     }
                     if(obj.weigh_date=='2118-01-01'){
-                        obj.weigh_date='-';
+                        obj.weigh_date='无';
                     }
                     html += `
                   <tr>   
                                 <td>${obj.id}</td>
                                 <td>${obj.name}</td>
-                                <td>${obj.length}</td>
+                                <td>${obj.length}</td>                                
+                                <td>${obj.width}</td>                                
                                 <td>${obj.tonnage}</td>
+                                <td>${obj.tonnage_net}</td>
+                                <td>${obj.tonnage_load}</td>
                                 <td>${obj.anchor_date}</td>
                                 <td>${obj.target_port}</td>
                                 <td>${obj.weigh_date}</td>
@@ -79,8 +91,9 @@ function loadShipByPage(pno1,pageSize1,dataStr1){
     })
 };
 //选择添加船舶数据按钮
-$("#myselect").change(function(){
-    var opt=$("#myselect").val();
+$("#myselect").click(function(){
+    //var opt=$("#myselect").val();
+    var opt=2;
     if(opt==0){
         return;
     }else if(opt==1){
