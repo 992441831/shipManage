@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>船舶监管系统</title>
+    <link rel="stylesheet" href="css/bootstrap.css">
+    <link rel="stylesheet" href="css/jquery.datetimepicker.css">
+    <script src="js/jquery.js"></script>
+    <script src="js/bootstrap.js"></script>
+    <script src="js/jquery.datetimepicker.js"></script>
+    <script src="js/ship_add.js"></script>
+
+    <style>
+        .data-padding{
+            padding:0;
+        }
+        .data-add{
+            text-align: center;
+            vertical-align: middle;
+            height:34px;
+            line-height: 34px;
+            font-size:14px;
+            font-weight: bolder;
+        }
+        .data-margin{
+            margin-bottom: 10px !important;
+        }
+
+        /*数据添加 anchorage,wharfs,vessel*/
+        .anchorage-jumbotron{
+            /*left: 50%;
+            top: 50%;*/
+            width:350px;
+            /*height:320px;*/
+            border-radius: 15px;
+            position: fixed;
+            z-index: 999;
+            background: #fff;
+            border:2px solid #ddd;
+            opacity: 1;
+            display: none;
+        }
+        .anchorage-jumbotron h1{
+            font-size:18px;
+            margin-top:0px;
+            text-align: center;
+            background: #337ab7;
+            line-height: 30px;
+            color:#fff;
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+        }
+        .anchorage-jumbotron ul{
+            list-style: none;
+        }
+        .anchorage-jumbotron ul li{
+            margin-top:15px;
+        }
+
+        .anchorage-jumbotron ul li input{
+            display: inline;
+            line-height: 18px;
+            font-size:14px;
+        }
+        .txt-btn{
+            text-align: center;
+        }
+        .anchorage-jumbotron{
+            display: block;
+            left: 35%;
+            top: 20%;
+            height: 200px;
+        } 
+    </style>
+</head>
+<body>
+<div class="anchorage-jumbotron">
+    <h1>锚定日期信息</h1>
+    <form id="form-anchorage">
+        <div class="col-xs-offset-1 form-inline">
+            <div class="form-group has-feedback data-margin">
+                <span class="data-padding data-add">日期：</span>
+                <input id="anchorage_date" name="mao_date" class="datetimepicker form-control" placeholder="请选择日期" type="text" style="width:125px;height:30px;margin:2px 0;padding:7px 10px;border:1px solid #ccc;" >
+            </div>
+            <div class="form-group has-feedback data-margin">
+                <span class="data-padding data-add">船名：</span>
+                <input class="form-control"  value="" type="text" name="name" placeholder="请输入船名">
+            </div>
+            <div class="txt-btn data-margin">
+                <a class="btn btn-primary btn-xs" id="anchorage-add" href="#" role="button" style="width: 100px;">添加</a>
+<!--
+                <a class="btn btn-primary btn-xs" id="anchorage-close" href="#" role="button">关闭</a>
+-->
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    //日历日期选择
+    $('.datetimepicker').datetimepicker({lang:'ch',format:'Y-m-d',formatDate:'Y-m-d',timepicker: false});
+</script>
+</html>
